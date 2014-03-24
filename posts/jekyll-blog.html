@@ -2,7 +2,7 @@
 <html>
     <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<title>用jeklly在github上搭建博</title>
+	<title>用jeklly在github上搭建博客</title>
 	<link rel="stylesheet" type="text/css" href="/css/style.css" />
 	<link rel="stylesheet" type="text/css" href="/css/pygments.css" />
     </head>
@@ -13,13 +13,16 @@
 	</header>
 	<section id="content_post">
 		<div class="post_title">
-			用jeklly在github上搭建博
+			用jeklly在github上搭建博客
 		</div>
 		<div class="post_features">
 			23 Mar 2014#
 		   	
-    				<a href="/tag/jekyll,blog/" title="11 posts" rel="11">
-        			jekyll,blog</a>
+    				<a href="/tag/jekyll/" title="6 posts" rel="6">
+        			jekyll</a>
+    			
+    				<a href="/tag/blog/" title="4 posts" rel="4">
+        			blog</a>
     			
 		</div>
 		<div class="real_content">
@@ -27,148 +30,223 @@
 
 <p>大致的步骤就是： 买域名-&gt;域名设置-&gt;github帐号-&gt;建立名为username.github.io的repository-&gt;安装linux, jekyll,git等环境-&gt;开始搭建博客。</p>
 
-<h4 id='id2'>关于域名</h4>
+<h3>关于域名</h3>
 
-<p>上 <a href='http://www.godaddy.com/'>GoDaddy</a>买个域名，涉及到钱的事儿一般都比较简单，按着提示购买就行了。不过godaddy不够稳定，刚买完域名就登不上godaddy了, 而且域名开启后，DNS解析速度也十分慢。 为了获得较快的、稳定的DNS解析，注册一个<a href='www.dnspod.cn'>DNSPOD</a>帐号来进行DNS解析。注册过后需要干两件事情：一个是更改域名的DNS设置，这个可以参考dnspod的帮助文档。</p>
+<p>上 <a href="http://www.godaddy.com/">GoDaddy</a>买个域名，涉及到钱的事儿一般都比较简单，按着提示购买就行了。不过godaddy不够稳定，刚买完域名就登不上godaddy了, 而且域名开启后，DNS解析速度也十分慢。
+为了获得较快的、稳定的DNS解析，注册一个<a href="www.dnspod.cn">DNSPOD</a>帐号来进行DNS解析。注册过后需要干两件事情：一个是更改域名的DNS设置，这个可以参考dnspod的帮助文档。</p>
 
 <blockquote>
-<p>dnspod帮助: https://support.dnspod.cn/Kb/showarticle/tsid/42/ https://support.dnspod.cn/Kb/showarticle/tsid/30/</p>
+<p>dnspod帮助:
+https://support.dnspod.cn/Kb/showarticle/tsid/42/
+https://support.dnspod.cn/Kb/showarticle/tsid/30/</p>
 </blockquote>
 
-<p>另一件事情是在DNSpod里插入指向github的A记录，IP为192.30.252.154,下面是我的DNSpod配置，除了配置了顶级域名的A记录，还为www的二级域名配置了CNAME记录。(配置二级域名留着以后再说吧，嘿嘿) <img alt='dnspod记录' src='http://kedgeree.me/image/dnspod_1.png' /></p>
+<p>另一件事情是在DNSpod里插入指向github的A记录，IP为192.30.252.154,下面是我的DNSpod配置，除了配置了顶级域名的A记录，还为www的二级域名配置了CNAME记录。(配置二级域名留着以后再说吧，嘿嘿)</p>
 
-<h4 id='github'>github</h4>
+<p><img src="http://kedgeree.me/image/dnspod_1.png" alt="dnspod记录"></p>
 
-<p>注册一个github帐号，并创建一个名为username.github.io(username为自己的用户名)的repository，再创建master分支(一般默认为master)。 这是github为我们提供的用户页面，每个项目页可以建立自己的项目页面以介绍项目。不同的地方在于用户页面在master分支下提交，而项目页面在gh-pages分支下提交。用户页面的访问路径为username/username.github.io, 项目页面的访问地址为username.github.io/projectname. 刚刚虽然我们配好了域名，但还是无法正常访问，需要在这个新的repository的根目录下加入一个名为CNAME的文件，并在文件里加入自己的域名。例如我的: <img alt='github cname' src='http://kedgeree.me/image/cname.png' /> 现在你可以在根目录放一个index.html，随便写点什么，再访问下自己的域名检查下是否能够访问了。</p>
-<div class='highlight'><pre><code class='html'>    index.html:
-    <span class='nt'>&lt;html&gt;</span>
-        <span class='nt'>&lt;head&gt;</span>
-            <span class='nt'>&lt;title&gt;</span>my blog<span class='nt'>&lt;/title&gt;</span>
-        <span class='nt'>&lt;/head&gt;</span>
-        <span class='nt'>&lt;body&gt;</span>
-            <span class='nt'>&lt;h1&gt;</span>Hello World!<span class='nt'>&lt;/h1&gt;</span> 
-        <span class='nt'>&lt;/dody&gt;</span>
-    <span class='nt'>&lt;/html&gt;</span>
-    
+<h3>github</h3>
+
+<p>注册一个github帐号，并创建一个名为username.github.io(username为自己的用户名)的repository，再创建master分支(一般默认为master)。
+这是github为我们提供的用户页面，每个项目页可以建立自己的项目页面以介绍项目。不同的地方在于用户页面在master分支下提交，而项目页面在gh-pages分支下提交。用户页面的访问路径为username/username.github.io, 项目页面的访问地址为username.github.io/projectname.
+刚刚虽然我们配好了域名，但还是无法正常访问，需要在这个新的repository的根目录下加入一个名为CNAME的文件，并在文件里加入自己的域名。例如我的:</p>
+
+<p><img src="http://kedgeree.me/image/cname.png" alt="github cname"></p>
+
+<p>现在你可以在根目录放一个index.html，随便写点什么，再访问下自己的域名检查下是否能够访问了。</p>
+
+<p><code>index.html</code>:</p>
+
+<div class="highlight"><pre><code class="html">    
+<span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;title&gt;</span>my blog<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;h1&gt;</span>Hello World!<span class="nt">&lt;/h1&gt;</span> 
+    <span class="nt">&lt;/dody&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
 </code></pre></div>
-<h4 id='git'>git.</h4>
+
+<h3>git</h3>
 
 <p>git的安装和github密钥的配置略去，记录常用命令：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">初始化：　
+$ git init
+建立一个master分支, 并且为独立的孤儿分支:
+git checkout --orphan master
+将变化的文件添加到缓冲区:
+git add filename
+git add *
+提交变化到本地仓库(从缓冲区):
+git commit -m &quot;版本的备注&quot;
+如果不是clone的项目，则需要现在远端服务器add:
+git remote add origin https://github.com/username/projectname.git
+最后推送到远端服务器的master分支上:
+git push origin master
+</code></pre></div>
+<h3>使用jekyll</h3>
 
-<blockquote>
-<p>初始化：　 $ git init 建立一个master分支, 并且为独立的孤儿分支: git checkout &#8211;orphan master 将变化的文件添加到缓冲区: git add filename git add * 提交变化到本地仓库(从缓冲区): git commit -m &#8220;版本的备注&#8221; 如果不是clone的项目，则需要现在远端服务器add: git remote add origin https://github.com/username/projectname.git 最后推送到远端服务器的master分支上: git push origin master</p>
-</blockquote>
+<p>jekyll的安装：
+需要先安装ruby, rubygem等，基本在ubuntu下都能通过yum install命令安装完成。安装好后执行:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">gem install jekyll
+</code></pre></div>
+<p>在命令行输入jekyll，出来帮助就表示安装好了～</p>
 
-<h3 id='jekyll'>使用jekyll</h3>
+<p>1.目录</p>
 
-<p>jekyll的安装： 需要先安装ruby, rubygem等，基本在ubuntu下都能通过yum install命令安装完成。安装好后执行:</p>
-
-<blockquote>
-<p>gem install jekyll</p>
-</blockquote>
-
-<p>在命令行输入jekyll，出来帮助就表示安装好了～ 1. 目录 在本地建立目录username.github.io，然后</p>
-
-<pre><code>cd username.github.io
+<p>在本地建立目录username.github.io，然后</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">cd username.github.io
 顺手配置下git啦:
 git init
-git checkout --orphan master</code></pre>
-
-<p>建立如下的目录结构: . |&#8212; <em>config.yml |&#8212; index.html |&#8212;</em>posts |&#8212; <em>layouts |&#8212;</em>includes |&#8212; <em>plugins |&#8212; image |&#8212; css |&#8212; js |&#8212;</em>sites</p>
-
-<p>当然我自己为这个添加了一些目录，你可以参考<a href='http://jekyllcn.com/docs/structure/'>jekyll的帮助</a>建立目录结构就够了 在_config.yml里添加基本的设置:</p>
-
-<pre><code>baseurl:http://kedgeree.me</code></pre>
-
+git checkout --orphan master
+</code></pre></div>
+<p>建立如下的目录结构:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">.
+|--- _config.yml
+|--- index.html
+|--- _posts
+|--- _layouts
+|--- _includes
+|--- _plugins
+|--- image
+|--- css
+|--- js
+|--- _sites
+</code></pre></div>
+<p>当然我自己为这个添加了一些目录，你可以参考<a href="http://jekyllcn.com/docs/structure/">jekyll的帮助</a>建立目录结构就够了
+在_config.yml里添加基本的设置:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">baseurl:http://kedgeree.me
+</code></pre></div>
 <p>这是为了在真实环境里能正常访问，而在调试的时候则需要使用在启动jeklly时用下面命令:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">jekyll server --baseurl=&#39;&#39; --watch
+--watch为调试模式，在本机调试时做了修改不需要重新启动jeklly
+</code></pre></div>
+<p>觉得jekyll的帮助对这些目录解释得挺简单的，自己试着对各目录进行理解:</p>
 
-<pre><code>jekyll server --baseurl=&#39;&#39; --watch
---watch为调试模式，在本机调试时做了修改不需要重新启动jeklly</code></pre>
+<p>1) index.html: 主页，默认会访问的页面。</p>
 
-<p>觉得jekyll的帮助对这些目录解释得挺简单的，自己试着对各目录进行理解: 1) index.html: 主页，默认会访问的页面。 2) <em>config.yml: 配置，可以参考jekyll的配置说明，或者自己定义变量，在任意页面都可以用了。通过site.变量名访问。 3)</em>layouts: 个人觉得jekyll的一个重要概念就是将静态页面做的可配置化。通过在_layouts里写一系列的模板来把外观可配置化。而在写博客的时候只需要关注内容而不需要关注展示。但个人觉得_layouts正如他的名字一样，主要关注布局， 只放主干的内容即可。 4) <em>includes: 这个目录主要用来放置一些公共的模板模块页面，这样在布局变化的时候可以很轻松的引入以前的公共代码。所以这也是</em>layouts只放主干布局的原因。 5) <em>plugins: 放置所有的插件，这些可以用来动态的生成一些数据。因为jekyll在运行前会先运行该目录下所有的以.rb结尾的文件。 6)</em>posts: 扔文章的地方，命名方式参考<a href='http://jekyllcn.com/docs/structure/'>jekyll帮助</a> 7) <em>site: jekyll编译后生成的真实网站，这就相当于把</em>layouts,_includes,index.html等合在了一起，生成了可以被浏览器解析的网页，真正需要放在github上其实只需要该目录。所以我的github上有两个项目，一个用来保存上面那些开发过程的产物；另一个用来放这个_site里的内容，对应的项目则为上面建立的username.github.io.</p>
+<p>2) _config.yml: 配置，可以参考jekyll的配置说明，或者自己定义变量，在任意页面都可以用了。通过site.变量名访问。</p>
 
-<p>废话太多，贴一点简单的代码: default.html:</p>
+<p>3) <em>layouts: 个人觉得jekyll的一个重要概念就是将静态页面做的可配置化。通过在</em>layouts里写一系列的模板来把外观可配置化。而在写博客的时候只需要关注内容而不需要关注展示。但个人觉得_layouts正如他的名字一样，主要关注布局， 只放主干的内容即可。</p>
 
-<pre><code>&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=utf-8&quot; /&gt;
-    &lt;title&gt;用jeklly在github上搭建博&lt;/title&gt;
-    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;/css/style.css&quot; /&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div id=&quot;wrapper&quot;&gt;
-        &lt;header&gt;
-            &lt;h1&gt;&lt;a href=&quot;/&quot; title=&quot;welcome to kedgeree@live&quot; class=&quot;home&quot;&gt;kedgeree@live&lt;/a&gt;:~/posts/jekyll-blog.html&lt;/h1&gt;
-        &lt;/header&gt;
-        &lt;section id=&quot;content&quot;&gt;
-            
-        &lt;/section&gt;
-        &lt;section id=&quot;tags_cloud&quot;&gt;
-            &lt;script type=&quot;text/javascript&quot; src=&quot;/js/jquery-1.10.1.js&quot;&gt;&lt;/script&gt;</code></pre>
-<script src='/js/jquery.tagcloud.js' type='text/javascript' /><script src='/js/tag_cloud.js' type='text/javascript' /><h2>Tags</h2><div class='tags'>
-    
-    <a href='/tag/test/' rel='1' title='1 posts'>
-        test</a>
-    
-    <a href='/tag/jekyll,blog/' rel='1' title='1 posts'>
-        jekyll,blog</a>
-    
-</div>
-<pre><code>        &lt;/section&gt;
-        &lt;/div&gt;
-        &lt;footer&gt;
-            	kedgeree.me with &lt;a href=&quot;https://github.com/kedgeree&quot; target=&quot;_blank&quot;&gt;github&lt;/a&gt;
-&lt;a href=&quot;#&quot;&gt;About&lt;/a&gt;
+<p>4) <em>includes: 这个目录主要用来放置一些公共的模板模块页面，这样在布局变化的时候可以很轻松的引入以前的公共代码。所以这也是</em>layouts只放主干布局的原因。</p>
 
-        &lt;/footer&gt;
-    &lt;/body&gt;
-&lt;/html&gt;</code></pre>
+<p>5) _plugins: 放置所有的插件，这些可以用来动态的生成一些数据。因为jekyll在运行前会先运行该目录下所有的以.rb结尾的文件。</p>
 
-<p>在content这个section里, 这个变量代表着index.html里的内容。其他的section主要是一些样式上的控制，不详细展开了。 再看看index.html：</p>
+<p>6) _posts: 扔文章的地方，命名方式参考<a href="http://jekyllcn.com/docs/structure/">jekyll帮助</a></p>
 
-<pre><code>---
-layout: default
-title:  kedgeree@live home
----
-&lt;ul&gt;</code></pre>
+<p>7) <em>site: jekyll编译后生成的真实网站，这就相当于把</em>layouts,<em>includes,index.html等合在了一起，生成了可以被浏览器解析的网页，真正需要放在github上其实只需要该目录。所以我的github上有两个项目，一个用来保存上面那些开发过程的产物；另一个用来放这个</em>site里的内容，对应的项目则为上面建立的username.github.io.</p>
 
-<p>　　　　　　<span>March 2014</span><li>&raquo;&nbsp;<a href='/posts/jekyll-blog.html'>用jeklly在github上搭建博</a></li></p>
+<p>废话太多，贴一点简单的代码:
+default.html:</p>
 
-<p>　　　　　　<span>November 2013</span><li>&raquo;&nbsp;<a href='/posts/hello-world.html'>申请好久的域名终于开始用了.</a></li></p>
+<div class="highlight"><pre><code class="html"><span class="cp">&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;content-type&quot;</span> <span class="na">content=</span><span class="s">&quot;text/html; charset=utf-8&quot;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;title&gt;</span>{{ page.title }}<span class="nt">&lt;/title&gt;</span>
+        <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">type=</span><span class="s">&quot;text/css&quot;</span> <span class="na">href=</span><span class="s">&quot;/css/style.css&quot;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;wrapper&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;header&gt;</span>
+            <span class="nt">&lt;h1&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;{{ site.url }}/&quot;</span> <span class="na">title=</span><span class="s">&quot;welcome to {{ site.sitename }}&quot;</span> <span class="na">class=</span><span class="s">&quot;home&quot;</span><span class="nt">&gt;</span>{{ site.sitename }}<span class="nt">&lt;/a&gt;</span>:~{{ page.url }}<span class="nt">&lt;/h1&gt;</span>
+        <span class="nt">&lt;/header&gt;</span>
+        <span class="nt">&lt;section</span> <span class="na">id=</span><span class="s">&quot;content&quot;</span><span class="nt">&gt;</span>
+            {{ content }}
+        <span class="nt">&lt;/section&gt;</span>
+        <span class="nt">&lt;section</span> <span class="na">id=</span><span class="s">&quot;tags_cloud&quot;</span><span class="nt">&gt;</span>
+        {% include sidebar_tagcloud.html %}             
+        <span class="nt">&lt;/section&gt;</span>
+        <span class="nt">&lt;/div&gt;</span>
+        <span class="nt">&lt;footer&gt;</span>
+        {% include footer.html %}
+        <span class="nt">&lt;/footer&gt;</span>
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div>
 
-<pre><code>&lt;/ul&gt;</code></pre>
+<p>在content这个section里, 这个变量代表着index.html里的内容。其他的section主要是一些样式上的控制，不详细展开了。
+再看看index.html：</p>
 
-<p>一开始的头信息指名了使用_layout目录里的default.html来作为该页面的模板，并声明了一个变量title，可以通过page.title来访问。 代码的功能为循环遍历所有文章，将_include/post_item1.html里的内容展示出来。 post_item1.html:</p>
+<div class="highlight"><pre><code class="html">    ---
+    layout: default
+    title:  kedgeree@live home
+    ---
+    <span class="nt">&lt;ul&gt;</span>
+       {% capture year %}{% endcapture %}
+       {% capture month %}{% endcapture %}
+       {% for post in site.posts %}
+           {% include post_item1.html %}
+       {% endfor %}
+    <span class="nt">&lt;/ul&gt;</span>
+</code></pre></div>
 
-<pre><code>&lt;span&gt;&lt;/span&gt;&lt;li&gt;&amp;raquo;&amp;nbsp;&lt;a href=&quot;&quot;&gt;&lt;/a&gt;&lt;/li&gt;</code></pre>
+<p>一开始的头信息指名了使用<em>layout目录里的default.html来作为该页面的模板，并声明了一个变量title，可以通过page.title来访问。
+代码的功能为循环遍历所有文章，将</em>include/post<em>item1.html里的内容展示出来。
+post</em>item1.html:</p>
 
-<p>前面一段为找出年月相同的文章在前面显示出年月，最后展示一个标题并给出文章的链接。如上面的代码，jekyll支持liquid语言，所以可以用<a href='http://docs.shopify.com/themes/liquid-basics'>liquid语言</a>写一些动态生成的东西。 同时这里也能看出来_include里面的文件就是直接原样的嵌套进了引用的地方，你甚至可以在外面声明变量，然后在include里使用。当然这样的确不便于理解，尽量还是不要这样写比较好。</p>
+<div class="highlight"><pre><code class="html"> 
+    {% capture new_year %}{{ post.date | date: &quot;%Y&quot; }}{% endcapture %}
+    {% capture new_month %}{{ post.date | date: &quot;%m&quot; }}{% endcapture %}
+    {% if new_year != year or  new_month != month %}
+    {% capture output %}{{ post.date | date: &quot;%B %Y&quot; }}{% endcapture %}
+    {% capture year %}{{ new_year }}{% endcapture %}
+    {% capture month %}{{ new_month }}{% endcapture %}
+    {% else %}
+    {% capture output %}{% endcapture %}
+    {% endif %}
+    <span class="nt">&lt;span&gt;</span>{{ output }}<span class="nt">&lt;/span&gt;&lt;li&gt;</span><span class="ni">&amp;raquo;&amp;nbsp;</span><span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;{{ site.baseurl }}{{ post.url }}&quot;</span><span class="nt">&gt;</span>{{ post.title }}<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+</code></pre></div>
 
-<p>大致的解释久到此为止了。 2. 添加标签云 因为我想做得比较简单，也没有任何导航，于是就只想添加一个标签云，方便进行分类。使用了网上提供的js和ruby脚本来生成标签云。 <a href='https://github.com/addywaddy/jquery.tagcloud.js/'>js在这里</a>:js的作用是生成标签云； <a href='https://github.com/kedgeree/dev.kedgeree.me/blob/master/_plugins/tag_page.r'>ruby脚本在这里</a>: ruby脚本的作用是生成标签页，就是单个标签所对应文章的列表; ruby脚本里需要用到 <em>layouts/tag</em>index.html来当作模板，最后会生成对应的标签页到_site/tag/tagname/index.html里。 所以添加一个tag_index.html到_layouts里：</p>
+<p>前面一段为找出年月相同的文章在前面显示出年月，最后展示一个标题并给出文章的链接。如上面的代码，jekyll支持liquid语言，所以可以用<a href="http://docs.shopify.com/themes/liquid-basics">liquid语言</a>写一些动态生成的东西。
+同时这里也能看出来_include里面的文件就是直接原样的嵌套进了引用的地方，你甚至可以在外面声明变量，然后在include里使用。当然这样的确不便于理解，尽量还是不要这样写比较好。</p>
 
-<pre><code>---
-layout: default
----
-&lt;div id=&quot;tag_home&quot; class=&quot;tag &quot;&gt;
-    &lt;ul class=&quot;posts&quot;&gt;
-    
-    &lt;/ul&gt;
-&lt;/div&gt;</code></pre>
+<p>大致的解释久到此为止了。</p>
 
-<p>相信简单看过jekyll文档的人都能轻松看懂这段代码了，就不解释了。其实到这里基本标签云就添加好了。 但是还有一个重要的配置需要在_config.yml里添加：</p>
+<ol>
+<li>添加标签云</li>
+</ol>
 
-<pre><code>plugins:  ./_plugins</code></pre>
+<p>因为我想做得比较简单，也没有任何导航，于是就只想添加一个标签云，方便进行分类。使用了网上提供的js和ruby脚本来生成标签云。</p>
 
+<p><a href="https://github.com/addywaddy/jquery.tagcloud.js/">js在这里</a>:js的作用是生成标签云；</p>
+
+<p><a href="https://github.com/kedgeree/dev.kedgeree.me/blob/master/_plugins/tag_page.r">ruby脚本在这里</a>: ruby脚本的作用是生成标签页，就是单个标签所对应文章的列表;</p>
+
+<p>ruby脚本里需要用到 <em>layouts/tag</em>index.html来当作模板，最后会生成对应的标签页到_site/tag/tagname/index.html里。</p>
+
+<p>所以添加一个tag<em>index.html到</em>layouts里：</p>
+
+<div class="highlight"><pre><code class="html"> ---
+    layout: default
+    ---
+    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;tag_home&quot;</span> <span class="na">class=</span><span class="s">&quot;tag {{page.tag}}&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">&quot;posts&quot;</span><span class="nt">&gt;</span>
+    {% for post in site.tags[page.tag] %}
+    {% include post_item1.html %}
+    {% endfor %}
+    <span class="nt">&lt;/ul&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+</code></pre></div>
+
+<p>相信简单看过jekyll文档的人都能轻松看懂这段代码了，就不解释了。其实到这里基本标签云就添加好了。
+但是还有一个重要的配置需要在_config.yml里添加：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">plugins:  ./_plugins
+</code></pre></div>
 <p>让jekyll能顺利的找到plugins的目录，这样才算完成了。</p>
 
 <p>总结得有点混乱，不过发现搭建这个博客的确不易，希望能因为不易坚持用下来。</p>
+
 		</div>
 	</section>
 	</div>
 	<footer>
-			kedgeree.me with <a href="https://github.com/kedgeree" target="_blank">github</a>
+		<p>	
+	kedgeree.me with <a href="https://github.com/kedgeree" target="_blank">github</a>
 	<a href="#">About</a>
+</p>
 
 	</footer>
     </body>
