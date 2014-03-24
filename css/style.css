@@ -82,13 +82,13 @@ a.home:visited {color: #0d0}	/* 已访问的链接 */
 a.home:hover {color: #29a629}	/* 鼠标移动到链接上 */
 a.home:active {color: #29a629}	/* 选定的链接 */
 
-a.real_content{
+.real_content a{
 	color: #11C2EE;
 	text-decoration: none;
 }
-a.real_content:visited {color: #11C2EE}	/* 已访问的链接 */
-a.real_content:hover {color: #10B5DE}	/* 鼠标移动到链接上 */
-a.real_content:active {color: #10B5DE}	/* 选定的链接 */
+.real_content a:visited {color: #11C2EE}	/* 已访问的链接 */
+.real_content a:hover {color: #10B5DE}	/* 鼠标移动到链接上 */
+.real_content a:active {color: #10B5DE}	/* 选定的链接 */
 
 
 a:link{color: #000;}
