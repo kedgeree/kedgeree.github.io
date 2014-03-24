@@ -11,7 +11,7 @@ body{
 	font-size: 1em;
 	width: 100%;
 	height: 100%;
-	font-family: Helvetica, Tahoma, Arial, STXihei, “华文细黑”, “Microsoft YaHei”, “微软雅黑”, SimSun, “宋体”, Heiti, “黑体”, sans-serif; 
+	font-family: Helvetica, Tahoma, Arial, “宋体”, Heiti, STXihei, “华文细黑”, “Microsoft YaHei”, “微软雅黑”, SimSun,  “黑体”, sans-serif; 
 }
 #wrapper{
 	min-height: 100%;	
