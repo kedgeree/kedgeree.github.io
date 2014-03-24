@@ -52,7 +52,7 @@ section ul li{
 }
 .real_content p{
 	text-indent: 2em;
-	line-height: 1.5em;
+	line-height: 2em;
 }
 #tags_cloud{
 	position: absolute;
@@ -110,23 +110,36 @@ a:active{color: #808080;}
 /*common*/
 
 img{
-	border: solid 5px grey;
+	border: solid 5px #ddd;
 	border-radius: 7px;
 	margin: 10px;
 }
 
 .highlight{
 	background-color: #eee;
-	border: solid 5px grey;
+	border: solid 5px #ddd;
 	border-radius: 7px;
 	margin: 10px;
 	padding: 10px;
 	word-wrap: break-word; 
 	word-break: normal; 
+	position: relative;
+	left: 2em;
 }
 h3{
 	line-height: 2.5em;
 }
 p{
 	line-height: 2em;
+}
+p code{
+	background-color: #eee;
+	border: solid #ddd 1px;
+	padding: 3px;
+	border-radius: 6px;
+}
+code{
+font-family: "Consolas","Lucida Console","Monaco", SimSun, “宋体”, STXihei, “Microsoft YaHei”, “微软雅黑”, “华文细黑”, Heiti, “黑体”, sans-serif;
+font-size: 1em;
+line-height: 1.5em;
 }
