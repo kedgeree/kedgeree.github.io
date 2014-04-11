@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>const static map的初始化和静态变量多次定义问题解决</title>
+	<link rel="stylesheet" type="text/css" href="/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="/css/pygments.css" />
+    </head>
+    <body>
+	<div id="wrapper">
+	<header>
+		<h1><a href="/" title="welcome to kedgeree@live" class="home">kedgeree@live</a>:~/posts/const-static-map.html</h1>
+	</header>
+	<section id="content_post">
+		<div class="post_title">
+			const static map的初始化和静态变量多次定义问题解决
+		</div>
+		<div class="post_features">
+			30 Mar 2014#
+		   	
+    				<a href="/tag/c++/" title="3 posts" rel="3">
+        			c++</a>
+    			
+    				<a href="/tag/stl/" title="3 posts" rel="3">
+        			stl</a>
+    			
+		</div>
+		<div class="real_content">
+　　　　		<p>前两天写代码的时候想定义一个静态的，并且已初始化的常量map。但是很苦恼不知道该如何初始化。后来查到解决方案:</p>
+
+<div class="highlight"><pre><code class="c++">    <span class="k">struct</span> <span class="n">CSMap</span>
+    <span class="p">{</span>
+        <span class="k">static</span> <span class="n">map</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span> <span class="k">struct</span> <span class="n">PairSplit</span><span class="o">&gt;</span> <span class="n">create_map</span><span class="p">();</span>
+        <span class="k">static</span> <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span> <span class="k">struct</span> <span class="n">PairSplit</span><span class="o">&gt;</span> <span class="n">mapPairSplit</span><span class="p">;</span>
+    <span class="p">};</span>
+    <span class="n">map</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span> <span class="k">struct</span> <span class="n">PairSplit</span><span class="o">&gt;</span><span class="n">CSMap</span><span class="o">::</span><span class="n">mapPairSplit</span> <span class="o">=</span> <span class="n">CSMap</span><span class="o">::</span><span class="n">create_map</span><span class="p">();</span>
+
+    <span class="n">map</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span> <span class="k">struct</span> <span class="n">PairSplit</span><span class="o">&gt;</span> <span class="n">CSMap</span><span class="o">::</span><span class="n">create_map</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">map</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span> <span class="k">struct</span> <span class="n">PairSplit</span><span class="o">&gt;</span> <span class="n">m</span><span class="p">;</span>
+        <span class="k">struct</span> <span class="n">PairSplit</span> <span class="n">p</span> <span class="o">=</span> <span class="p">{</span><span class="s">&quot;&amp;&quot;</span><span class="p">,</span><span class="s">&quot;=&quot;</span><span class="p">};</span>
+        <span class="n">m</span><span class="p">[</span><span class="sc">&#39;p&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">p</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">m</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div>
+   
+
+<p>代码如上，需要先建立一个结构体(类)来封装map的初始化，因为静态变量需要初始化，但是map又没有合适的初始化方式。</p>
+
+<p>这里其实没有实现常量的需求，一开始定义了static const map, 但是编译器提示错误:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">error: passing &#39;const std::map&lt;char, PairSplit, std::less&lt;char&gt;, std::allocator&lt;std::pair&lt;const char, PairSplit&gt; &gt; &gt;&#39; as &#39;this&#39; argument of &#39;_Tp&amp; std::map&lt;_Key, _Tp, _Compare, _Alloc&gt;::operator[](const _Key&amp;) [with _Key = char, _Tp = PairSplit, _Compare = std::less&lt;char&gt;, _Alloc = std::allocator&lt;std::pair&lt;const char, PairSplit&gt; &gt;]&#39; discards qualifiers
+</code></pre></div>
+<p>把const去掉就OK了。原因是map的[]操作符在key值不存在时会在map中加入该key，因此可能改变map的值，这样map就无法使用const来限定。
+如果非要使用const，则在使用map时不能使用[]操作符. 如果想获得某个元素，可以用map.find(); 而如果想初始化则可以使用pair的数组来初始化map. 例子如下:</p>
+
+<div class="highlight"><pre><code class="c++">    <span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">iostream</span><span class="o">&gt;</span>
+    <span class="err">#</span><span class="n">include</span> <span class="o">&lt;</span><span class="n">map</span><span class="o">&gt;</span>
+    <span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+    
+    <span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">//构造pair数组</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">pair</span> <span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span><span class="kt">int</span><span class="o">&gt;</span> <span class="n">key_value</span><span class="p">[]</span><span class="o">=</span><span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="p">};</span>
+        <span class="k">const</span> <span class="k">static</span>   <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="kt">int</span><span class="p">,</span> <span class="kt">int</span><span class="o">&gt;</span> <span class="n">map_test</span><span class="p">(</span><span class="n">key_value</span> <span class="p">,</span> <span class="n">key_value</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
+        <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">map_test</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">;</span>
+        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div>
+    
+
+<p>这个静态常量map是构造成功了，但是遇到了经典的multiple definition of. 以前一直没仔细看这是什么原因，这次也记录下来，其实原因很简单:</p>
+
+<p>假设有<code>A.h</code>, <code>A.cpp</code>, <code>B.h</code>, <code>B.cpp</code>四个文件, 情况如下：</p>
+
+<p>1.在<code>A.h</code>里定义了上面这个静态的map，并且在这个文件里初始化;</p>
+
+<p>2.在<code>A.cpp</code>里使用了这个静态map，当然包含了<code>A.h</code>;</p>
+
+<p>3.<code>B.h</code>包含了<code>A.h</code>;</p>
+
+<p>4.编译时先生成<code>A.o</code>和<code>B.o</code>, 最后将.o链接为最终的bin文件;</p>
+
+<p>因为都包含了<code>A.h</code>, 并且在单独编译生成.o文件时都彼此不认识，于是就都给这个静态的map分配了座位，而在链接时编译器以查看便发现重复定义了。</p>
+
+<p>要避免重复定义也十分简单，只要把初始化放到<code>A.cpp</code>即可，因为这样即可避免因被包含而被多次编译。</p>
+
+		</div>
+	</section>
+	</div>
+	<footer>
+		<p>	
+	kedgeree.me with <a href="https://github.com/kedgeree" target="_blank">github</a>
+	<a href="About">About</a>
+</p>
+
+	</footer>
+    </body>
+</html>

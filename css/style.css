@@ -82,7 +82,7 @@ a.home:visited {color: #0d0}	/* 已访问的链接 */
 a.home:hover {color: #29a629}	/* 鼠标移动到链接上 */
 a.home:active {color: #29a629}	/* 选定的链接 */
 
-.real_content a{
+.real_content a:link{
 	color: #11C2EE;
 	text-decoration: none;
 }
