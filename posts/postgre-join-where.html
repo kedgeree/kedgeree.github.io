@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>PostgreSql初学, where join不同位置效率对比</title>
+	<link rel="stylesheet" type="text/css" href="/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="/css/pygments.css" />
+    </head>
+    <body>
+	<div id="wrapper">
+	<header>
+		<h1><a href="/" title="welcome to kedgeree@live" class="home">kedgeree@live</a>:~/posts/postgre-join-where.html</h1>
+	</header>
+	<section id="content_post">
+		<div class="post_title">
+			PostgreSql初学, where join不同位置效率对比
+		</div>
+		<div class="post_features">
+			14 Apr 2014#
+		   	
+    				<a href="/tag/PostgreSql/" title="10 posts" rel="10">
+        			PostgreSql</a>
+    			
+		</div>
+		<div class="real_content">
+　　　　		<p>最近工作中一直在用postgresql， 前两天想用两张表join再查询时，纠结了一会儿到底改先select出来再join还是先join再where.</p>
+
+<p>一开始构想的是先select出来再join，因为我可能会有比较大的数据，这样减少了大量数据后再join，效率肯定会提高， 实验过后发现结果并非如此。</p>
+
+<p>我的表结构:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">pre_log_analysize=&gt; \d ori_log_info_a
+        Table &quot;public.ori_log_info_a&quot;
+   Column   |            Type             | Modifiers 
+------------+-----------------------------+-----------
+ seq        | character varying(32)       | not null
+ uin        | character varying(128)      | not null
+ timestamp  | timestamp without time zone | not null
+ sysid      | integer                     | not null
+ logtype    | character varying(64)       | not null
+ resultcode | integer                     | 
+ resultinfo | character varying(1024)     | 
+ timecost   | bigint                      | 
+ otherkeys  | text                        | 
+ seq_sys    | character varying(64)       | 
+ reserve    | character varying(128)      | 
+Indexes:
+&quot;ori_log_info_a_pkey&quot; PRIMARY KEY, btree (seq)
+&quot;index_join&quot; btree (logtype)
+&quot;index_key_a&quot; btree (uin, &quot;timestamp&quot;, sysid)
+=================分割线========================
+pre_log_analysize=&gt; \d ori_log_info_b
+            Table &quot;public.ori_log_info_b&quot;
+   Column   |            Type             | Modifiers 
+------------+-----------------------------+-----------
+ seq        | character varying(32)       | not null
+ uin        | character varying(128)      | not null
+ timestamp  | timestamp without time zone | not null
+ sysid      | integer                     | not null
+ logtype    | character varying(64)       | not null
+ resultcode | integer                     | 
+ resultinfo | character varying(1024)     | 
+ timecost   | bigint                      | 
+ otherkeys  | text                        | 
+ seq_sys    | character varying(64)       | 
+ reserve    | character varying(128)      | 
+ Indexes:
+&quot;ori_log_info_b_pkey&quot; PRIMARY KEY, btree (seq)
+&quot;index_join_b&quot; btree (logtype)
+&quot;index_key&quot; btree (uin, &quot;timestamp&quot;, sysid)
+</code></pre></div>
+<p>两张表一模一样，而且都在需要检索的列上建立了索引. a表有记录694,162条, b表有664,168条，数据量不算太大.</p>
+
+<p>然后用explain analyze来分析:</p>
+
+<p>先join再where:</p>
+
+<p><img src="http://kedgeree.me/image/join_where.png" alt="先join再where结果"></p>
+
+<p>先用where子查询再join:</p>
+
+<p><img src="http://kedgeree.me/image/where_join.png" alt="先where再join结果"></p>
+
+<p>上面可以看到前者花的时间比后者要短，并且执行的步骤是一模一样的。这是否说明postgresql将语句优化后其实执行的过程基本相同? 但耗费的时间可能是由于子查询引起的. 留待考证。</p>
+
+<p>另外我实验了较小的数据结果也跟这个一致，以后等数据数据囤积多了再做进一步的测试。</p>
+
+		</div>
+	</section>
+	</div>
+	<footer>
+		<p>	
+	kedgeree.me with <a href="https://github.com/kedgeree" target="_blank">github</a>
+	<a href="About">About</a>
+</p>
+
+	</footer>
+    </body>
+</html>
