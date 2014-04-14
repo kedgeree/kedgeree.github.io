@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>PostgreSql触发器和函数初接触</title>
+	<link rel="stylesheet" type="text/css" href="/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="/css/pygments.css" />
+    </head>
+    <body>
+	<div id="wrapper">
+	<header>
+		<h1><a href="/" title="welcome to kedgeree@live" class="home">kedgeree@live</a>:~/posts/postgre-trigger-function.html</h1>
+	</header>
+	<section id="content_post">
+		<div class="post_title">
+			PostgreSql触发器和函数初接触
+		</div>
+		<div class="post_features">
+			15 Apr 2014#
+		   	
+    				<a href="/tag/PostgreSql/" title="10 posts" rel="10">
+        			PostgreSql</a>
+    			
+		</div>
+		<div class="real_content">
+　　　　		<p>以前没写过存储过程，这次用postgre刚好学习下postgre的函数，也应用到实际中.</p>
+
+<p>我的需求是在插入一条数据时，判断我数据里某个字段在包含某个字符时，select出与之相同seq和关键字的数据，并计算出timestamp之差，并且精确到毫秒。我想用的方法为在数据库插入触发器来实现该功能。</p>
+
+<h4>触发器</h4>
+
+<p>创建触发器的基本语法:</p>
+
+<div class="highlight"><pre><code class="sql">    <span class="k">CREATE</span>  <span class="k">TRIGGER</span> <span class="k">trigger_name</span> <span class="p">[</span><span class="k">BEFORE</span><span class="o">|</span><span class="k">AFTER</span><span class="o">|</span><span class="k">INSTEAD</span> <span class="k">OF</span><span class="p">]</span> <span class="n">event_name</span>
+    <span class="k">ON</span> <span class="k">table_name</span>
+    <span class="p">[</span>
+     <span class="c1">-- Trigger logic goes here....</span>
+    <span class="p">];</span>  
+</code></pre></div>
+
+<p>我要建的触发器例子:</p>
+
+<div class="highlight"><pre><code class="sql">    <span class="k">CREATE</span> <span class="k">TRIGGER</span> <span class="n">update_cost</span>
+    <span class="k">AFTER</span> <span class="k">INSERT</span> <span class="k">ON</span> <span class="n">ori_log_info_a</span>
+    <span class="k">FOR</span> <span class="k">EACH</span> <span class="k">ROW</span> <span class="k">EXECUTE</span> <span class="k">PROCEDURE</span> <span class="n">update_costtime</span><span class="p">()</span>
+    <span class="p">;</span>
+</code></pre></div>
+
+<p>for each row execute表示为每一条插入的数据执行update_costtime()函数.
+so, 创建触发器还是很简单的，比较复杂的部分在实现相应的函数.</p>
+
+<h4>postgre函数</h4>
+
+<p>创建函数基本语法:</p>
+
+<div class="highlight"><pre><code class="sql">    <span class="k">CREATE</span> <span class="p">[</span><span class="k">OR</span> <span class="k">REPLACE</span><span class="p">]</span> <span class="k">FUNCTION</span> <span class="n">function_name</span> <span class="p">(</span><span class="n">arguments</span><span class="p">)</span> 
+    <span class="k">RETURNS</span> <span class="n">return_datatype</span> <span class="k">AS</span> <span class="err">$</span><span class="n">variable_name</span><span class="err">$</span>
+        <span class="k">DECLARE</span>
+        <span class="n">declaration</span><span class="p">;</span>
+        <span class="p">[...]</span>
+    <span class="k">BEGIN</span>
+        <span class="o">&lt;</span> <span class="n">function_body</span> <span class="o">&gt;</span>
+        <span class="p">[...]</span>
+        <span class="k">RETURN</span> <span class="err">{</span> <span class="n">variable_name</span> <span class="o">|</span> <span class="n">value</span> <span class="err">}</span>
+    <span class="k">END</span><span class="p">;</span> <span class="k">LANGUAGE</span> <span class="n">plpgsql</span><span class="p">;</span>  
+ 
+</code></pre></div>
+
+<p>我的例子:</p>
+
+<div class="highlight"><pre><code class="sql">    <span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="k">FUNCTION</span> <span class="n">update_costtime</span><span class="p">()</span> <span class="k">RETURNS</span> <span class="k">TRIGGER</span> <span class="k">AS</span> <span class="err">$</span><span class="n">update_cost</span><span class="err">$</span>
+        <span class="k">DECLARE</span>
+            <span class="n">logtype_trim</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">32</span><span class="p">);</span>
+            <span class="n">logtype_prefix</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">32</span><span class="p">);</span>
+            <span class="n">logtype_suffix</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">8</span><span class="p">);</span>
+            <span class="n">time_req</span> <span class="k">timestamp</span><span class="p">;</span>
+            <span class="n">REC</span> <span class="n">record</span><span class="p">;</span>
+        <span class="k">BEGIN</span>
+            <span class="n">logtype_trim</span> <span class="o">=</span> <span class="k">TRIM</span><span class="p">(</span><span class="k">NEW</span><span class="p">.</span><span class="n">logtype</span><span class="p">);</span>
+            <span class="c1">--raise warning &#39;test(%)&#39;,logtype_trim;</span>
+            <span class="n">logtype_suffix</span> <span class="o">=</span> <span class="n">SUBSTR</span><span class="p">(</span> <span class="n">logtype_trim</span><span class="p">,</span> <span class="k">LENGTH</span><span class="p">(</span><span class="n">logtype_trim</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="p">);</span>
+            <span class="c1">--raise warning &#39;test(%)&#39;, logtype_suffix;</span>
+            <span class="n">IF</span><span class="p">(</span> <span class="n">logtype_suffix</span> <span class="o">=</span> <span class="s1">&#39;Ans&#39;</span> <span class="p">)</span> <span class="k">THEN</span>
+                <span class="n">logtype_prefix</span> <span class="o">=</span> <span class="n">SUBSTR</span><span class="p">(</span> <span class="n">logtype_trim</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="k">LENGTH</span><span class="p">(</span><span class="n">logtype_trim</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="p">);</span>
+                <span class="c1">--raise warning &#39;test(%)&#39;, logtype_prefix;</span>
+                <span class="k">FOR</span> <span class="n">REC</span> <span class="k">IN</span> <span class="k">SELECT</span> <span class="k">timestamp</span> <span class="k">from</span> <span class="n">ori_log_info_a</span> <span class="k">where</span> <span class="n">seq_sys</span> <span class="o">=</span> <span class="k">NEW</span><span class="p">.</span><span class="n">seq_sys</span> <span class="k">and</span> <span class="n">logtype</span><span class="o">=</span><span class="n">logtype_prefix</span> <span class="n">LOOP</span>  
+                    <span class="k">UPDATE</span> <span class="n">ori_log_info_a</span> <span class="k">SET</span> <span class="n">timecost</span> <span class="o">=</span> <span class="k">extract</span><span class="p">(</span><span class="n">microseconds</span> <span class="k">FROM</span> <span class="p">(</span><span class="k">NEW</span><span class="p">.</span><span class="k">timestamp</span> <span class="o">-</span> <span class="n">REC</span><span class="p">.</span><span class="k">timestamp</span><span class="p">))</span> <span class="k">where</span> <span class="n">seq</span> <span class="o">=</span> <span class="k">NEW</span><span class="p">.</span><span class="n">seq</span><span class="p">;</span>
+                    <span class="k">RETURN</span> <span class="k">NEW</span><span class="p">;</span>
+                <span class="k">END</span> <span class="n">LOOP</span><span class="p">;</span>
+            <span class="k">END</span> <span class="n">IF</span><span class="p">;</span>
+            <span class="k">RETURN</span>  <span class="k">NULL</span><span class="p">;</span>
+        <span class="k">END</span><span class="p">;</span>
+    <span class="err">$</span><span class="n">update_cost</span><span class="err">$</span> <span class="k">LANGUAGE</span> <span class="n">plpgsql</span><span class="p">;</span>
+</code></pre></div>
+
+<p>在函数里，用NEW代表插入的数据集，可以取到插入的数据；函数整体的功能比较简单，几个小点记录一下：
+1. 字符串函数SUBSTR貌似是从1数起的，这对于用惯了C++的人来说真是浑身难受；
+2. 时间差的计算.</p>
+
+<p>extract函数是从时间戳里取出某个字段, 如：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">pre_log_analysize=&gt; select extract(day from &#39;2014-04-15&#39;::timestamp);
+date_part 
+-----------
+    15
+</code></pre></div>
+<p>因为我要取出微秒，所以用了microseconds，而且postgre时间戳的显示是忽略最后的0.也就是说555560us，显示在posgre里为55556.</p>
+
+<p>3.在屏幕打印可以使用</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">raise warning &#39;to print:%&#39;,the variable name;
+raise notice &#39;to print:%&#39;,the variable name;
+</code></pre></div>
+<p>posgre触发器的简单应用还是很快捷的，比起在程序里去select再计算插入方便太多，关键这里对时间戳能进行计算实在太方便；我程序里有多种多样的时间戳格式，光转换就是巨大的工程.</p>
+
+		</div>
+	</section>
+	</div>
+	<footer>
+		<p>	
+	kedgeree.me with <a href="https://github.com/kedgeree" target="_blank">github</a>
+	<a href="About">About</a>
+</p>
+
+	</footer>
+    </body>
+</html>
