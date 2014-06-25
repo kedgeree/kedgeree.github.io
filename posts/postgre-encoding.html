@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<title>postgres编码设置</title>
+	<link rel="stylesheet" type="text/css" href="/css/style.css" />
+	<link rel="stylesheet" type="text/css" href="/css/pygments.css" />
+    </head>
+    <body>
+	<div id="wrapper">
+	<header>
+		<h1><a href="/" title="welcome to kedgeree@live" class="home">kedgeree@live</a>:~/posts/postgre-encoding.html</h1>
+	</header>
+	<section id="content_post">
+		<div class="post_title">
+			postgres编码设置
+		</div>
+		<div class="post_features">
+			08 May 2014#
+		   	
+    				<a href="/tag/PostgreSql/" title="10 posts" rel="10">
+        			PostgreSql</a>
+    			
+    				<a href="/tag/encoding/" title="8 posts" rel="8">
+        			encoding</a>
+    			
+		</div>
+		<div class="real_content">
+　　　　		<p>由于换了一台机器部署postgresql, 结果中文顺利的插入不进去了; 报如下错误:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">ERROR:  invalid byte sequence for encoding &quot;UTF8&quot;: 0xb4
+</code></pre></div>
+<p>查看了之前的机器的字符集为SQL<em>ASCII, 而现在是UTF8; 于是想把编码改成SQL</em>ASCII.</p>
+
+<p>用<code>\l</code>就能看到数据库的编码：</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">pre_log_analysize=# \l
+                                        List of databases
+       Name        |   Owner   | Encoding  |   Collate   |    Ctype    |    Access privileges    
+-------------------+-----------+-----------+-------------+-------------+-------------------------
+ postgres          | postgre   | UTF8      | en_US.UTF-8 | en_US.UTF-8 | 
+ pre_log_analysize | preonline | SQL_ASCII | C           | C           | =Tc/preonline          +
+                   |           |           |             |             | preonline=CTc/preonline
+ template0         | postgre   | UTF8      | en_US.UTF-8 | en_US.UTF-8 | =c/postgre             +
+                   |           |           |             |             | postgre=CTc/postgre
+ template1         | postgre   | UTF8      | en_US.UTF-8 | en_US.UTF-8 | =c/postgre             +
+                   |           |           |             |             | postgre=CTc/postgre
+(4 rows)
+</code></pre></div>
+<p>还可以通过<code>show server_encoding</code> 和<code>show client_encoding</code>来查看服务器端和客户端的编码情况。</p>
+
+<p>首先要改变数据库的编码按stack overflow上的大牛们给的步骤走起:</p>
+
+<p>1.dump database;</p>
+
+<p>2.drop database;</p>
+
+<p>3.create database with setting encoding.</p>
+
+<p>4.load data into database;</p>
+
+<p>由于我的数据库暂时只有些测试数据就不用备份了，直接drop.</p>
+
+<p>使用</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">drop database pre_log_analysize
+</code></pre></div>
+<p>会报错: <code>ERROR: cannot drop the currently open database</code></p>
+
+<p>改用 <code>dropdb pre_log_analysize</code> 才能顺利的drop掉数据库;</p>
+
+<p>创建数据库时使用:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">createdb -E SQL_ASCII pre_log_analysize -T template0 --lc-collate=C  --lc-ctype=C
+</code></pre></div>
+<p>具体的解释可以参考 <a href="http://www.postgresql.org/docs/8.3/static/multibyte.html">POSTRESQL文档</a></p>
+
+<p>在没带-T是参数的时候会报错，意识是说与模板的编码设置不同，无法将其设置为指定的编码，这就需要指定模板,所以这里必须得带上-T参数.</p>
+
+<p>另外我对比了<code>postgresql.conf</code>， 配置的编码也不同:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">lc_messages = &#39;C&#39;                       # locale for system error message
+                                    # strings
+lc_monetary = &#39;C&#39;                       # locale for monetary formatting
+lc_numeric = &#39;C&#39;                        # locale for number formatting
+lc_time = &#39;C&#39;                           # locale for time formatting
+</code></pre></div>
+<p>正常的设置的都是<code>C</code>, 报错的使用的是<code>en_US.UTF8</code>。但是改了这个配置并重启再重建数据库也没有生效; 估计要在initdb之前更改这个配置才可以。</p>
+
+<p>最后再罗嗦一点儿，虽然设好字符编码过后能正常的插入了，显示并没有正常. 在我设置了客户端编码后才正常显示了:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">\encoding SQL_ASCII;
+</code></pre></div>
+		</div>
+	</section>
+	</div>
+	<footer>
+		<p>	
+	kedgeree.me with <a href="https://github.com/kedgeree" target="_blank">github</a>
+	<a href="About">About</a>
+	<a href="Resume">Resume</a>
+</p>
+
+	</footer>
+    </body>
+</html>
