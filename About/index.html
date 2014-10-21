@@ -1,73 +1,191 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html>
-    <head>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-	<meta name="baidu-site-verification" content="CnZETkKnmM" />
-	<title>About Kedgeree</title>
-	<link rel="stylesheet" type="text/css" href="/css/style.css" />
-    </head>
-    <body>
-	<div id="wrapper">
-	<header>
-		<h1><a href="/" title="welcome to kedgeree@live" class="home">kedgeree@live</a>:~/About/index.html</h1>
-	</header>
-	<section id="content">
-　　　　	<h2>About me</h2>
-<hr style="margin-top: 10px; margin-bottom:5px" />
-<p><strong>Name:</strong> kedgeree</p>
-<p><strong>Sex：</strong> Female</p>
-<p><strong>email:</strong> kedgereeyu@gmail.com</p>
-<p><strong>work experience：</strong> Now I&#39;m engaged in Testing Tools Development, and once have been a system tester for two years. Work for a company since I was graduate from university, and never change a job.</p>
-<p><strong>hobbies:</strong> coding, music, drawing, cooking.</p>
-<p><strong>something else want to blabla:</strong> Really interested in computer science since I was a child, about 10 years old. But until now my coding skill is struggling at an awful level. I really want to create beautiful code, so just try hard to achieve it.</p>
+<head lang="en">
+	<meta  charset="utf-8">
+	<title>Kedgeree's Resume</title>
+	
+	<link rel="stylesheet" type="text/css" href="css/jquery.fullPage.css" />
+	<link rel="stylesheet" type="text/css" href="css/style.css" />
+	<link rel="stylesheet" type="text/css" href="css/icon-font.css" />
 
-	</section>
-	<section id="tags_cloud">
-		<script type="text/javascript" src="/js/jquery-1.10.1.js"></script>
-<script type="text/javascript" src="/js/jquery.tagcloud.js"></script>
-<script type="text/javascript" src="/js/tag_cloud.js"></script>
-<h2>Tags</h2>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
-<div class="tags">
-    
-    <a href="/tag/test/" title="1 posts" rel="1">
-        test</a>
-    
-    <a href="/tag/jekyll/" title="1 posts" rel="1">
-        jekyll</a>
-    
-    <a href="/tag/blog/" title="1 posts" rel="1">
-        blog</a>
-    
-    <a href="/tag/c++/" title="1 posts" rel="1">
-        c++</a>
-    
-    <a href="/tag/stl/" title="1 posts" rel="1">
-        stl</a>
-    
-    <a href="/tag/PostgreSql/" title="3 posts" rel="3">
-        PostgreSql</a>
-    
-    <a href="/tag/encoding/" title="1 posts" rel="1">
-        encoding</a>
-    
-    <a href="/tag/programer/" title="1 posts" rel="1">
-        programer</a>
-    
-    <a href="/tag/thinkings/" title="1 posts" rel="1">
-        thinkings</a>
-    
-</div>
-		
-	</section>
-	</div>
-	<footer>
-		<p>	
-	kedgeree.me with <a href="https://github.com/kedgeree" target="_blank">github</a>
-	<a href="About">About</a>
-	<a href="Resume">Resume</a>
-</p>
+	<!-- This following line is needed in case of using the default easing option or when using another
+	 one rather than "linear" or "swing". You can also add the full jQuery UI instead of this file if you prefer -->
+	<script src="vendors/jquery.easings.min.js"></script>
 
-	</footer>
-    </body>
+
+	<!-- This following line needed in the case of using the plugin option `scrollOverflow:true` -->
+	<script type="text/javascript" src="vendors/jquery.slimscroll.min.js"></script>
+
+	<script type="text/javascript" src="script/jquery.fullPage.js"></script>
+	<script type="text/javascript" src="script/resume.js"></script>
+	<script src="script/Chart.js"></script>
+	<script src="layer/layer.min.js"></script>
+</head>
+<body>
+	<nav>
+		<ul id="navigation">
+			<li><a href="#page1">Contact Me</a></li>
+			<li><a href="#page2">个人简介</a></li>
+			<li><a href="#page3">工作经验</a></li>
+			<li><a href="#page4">自我评价</a></li>
+		</ul>
+	</nav>
+	<div id="fullpage">
+	    <div class="section" id="cover">
+	    	<img id="avatar" src="images/avatar.jpg" alt="kedgeree is beautiful." />
+	    	<div id="brief">
+	    		<h2>余夏婷</h2>
+	    		<div id="tags">
+	    			<span class="trans_bg">强迫症</span>
+	    			<span class="trans_bg">脑洞大</span>
+	    			<span class="trans_bg">热爱IT</span>
+	    		</div>
+	    		<h2>Never Stop Trying My Best...</h2>
+	    		<h3>tel: 18998902710</h3>
+	    		<h3>mail: kedgereeyu@gmail.com</h3>
+	    	</div>
+	    	<div id="enter">
+	    		<a href="#page2">
+	    			<img src="images/arrow.png" alt="进入下一页"/>
+	    		</a>
+	    	</div>
+	    </div>
+	    <div class="section">
+	    	<div class ="wrapper">
+		    	<div id="glyphs">
+			    	<div class="glyph">
+						<div class="fs1" aria-hidden="true" data-icon="&#xe01e;"></div>
+						<span>25岁</span>
+					</div>
+				 	<div class="glyph">
+						<div class="fs1" aria-hidden="true" data-icon="&#xe011;"></div>
+						<span>工作3年</span>
+					</div>
+				 	<div class="glyph">
+						<div class="fs1" aria-hidden="true" data-icon="&#xe012;"></div>
+						<span>回归成都</span>
+					</div>
+					<div class="glyph">
+						<div class="fs1" aria-hidden="true" data-icon="&#xe024;"></div>
+						<span>西南交大.计算机.本科</span>
+					</div>
+				</div>
+			</div>
+	    </div>
+	    <div class="section" id="work_exp">
+			<div class="slide" data-anchor="slide1" id="slide_cover">
+				<div class="slide_content"> 
+					<img id="tencent_ico" src="images/tencent-256.png" alt="tencent"/>
+					<h1> | 3.5年</h1>
+				</div>
+				<div id="slide_footer">
+					<img id="pixel_gal" src="images/pixel_gal_alpha.png" alt="it's me."/>
+				</div>
+			</div>
+		    <div class="slide" data-anchor="slide2">
+		    	<div class="slide_content text-left">
+		    		<div class="left">
+			    		<h2>自动化测试平台重构</h2>
+		    			<h3>测试开发</h3>
+		    			<h3>2014.06 - 2014.10</h3>
+			    	</div>
+			    	<ul class="middle">
+			    		<li>重构自动化平台，满足大数据测试的需要。前台提升对大量数据管理、生成的易用性；后台支持更丰富的测试方式和条件</li>
+						<li>参与自动化测试平台重构的前后台设计，以及前端开发</li> 
+						<li>在3个月内和团队一起已经基本完成平台的系统设计及搭建； 我在项目中完成了用例管理，编辑，调试，结果呈现等页面的前台设计和编码</li>
+					</ul>
+					<div class="right">
+						<canvas id="myChart" width="200" height="200"></canvas>
+					</div>
+					<div class="clear"></div>
+				</div>
+		    </div>
+		    <div class="slide" data-anchor="slide3">
+		     	<div class="slide_content text-left">
+		    		<div class="left">
+			    		<h2>持续集成平台</h2>
+		    			<h3>测试开发</h3>
+		    			<h3>2014.04 - 2014.07</h3>
+			    	</div>
+			    	<ul class="middle">
+			    		<li>在jenkins基础上封装适合部门开发过程的持续集成平台，维护平台运营支持开发实际使用</li>
+						<li>完成了由公司SVN到自己SVN的代码同步；重新封装jenkins接口</li> 
+						<li>完成适合部门流程使用的前台页面；维护jenkins及基于nexus的maven私服</li>
+						<li>接手持续平台后，平台趋于稳定，开发和QA来投诉建议的次数明显减少</li>
+					</ul>
+					<div class="right">
+						<canvas id="myChart1" width="200" height="200"></canvas>
+					</div>
+					<div class="clear"></div>
+				</div>
+		    </div>
+		    <div class="slide" data-anchor="slide4">
+		     	<div class="slide_content text-left">
+		    		<div class="left">
+			    		<h2>准现网平台</h2>
+		    			<h3>测试开发</h3>
+		    			<h3>2013.06 - 2014.04</h3>
+			    	</div>
+			    	<ul class="middle">
+			    		<li>准现网平台主要是用于从现网引入流量到测试环境，然后在测试环境进行比对分析</li>
+						<li>从无到有的搭建了准现网平台，全面负责了平台的设计，前后台编码以及接入运营支持；持续和测试进行合作收集反馈，并进行优化</li> 
+						<li>完成后台代码1.2w行，接入系统25个，负责期间一直持续稳定运行，帮助测试发现几十个bug; 版本发布时制作了两张海报。准现网系统也获得部门的创新奖</li>
+					</ul>
+					<div class="right">
+						<canvas id="myChart2" width="200" height="200"></canvas>
+					</div>
+					<div class="clear"></div>
+				</div>
+		    </div>
+		    <div class="slide" data-anchor="slide5">
+		     	<div class="slide_content text-left">
+		    		<div class="left">
+			    		<h2>腾讯支付产品核心后台系统</h2>
+		    			<h3>系统测试</h3>
+		    			<h3>2011.02 - 2013.05</h3>
+			    	</div>
+			    	<ul class="middle">
+			    		<li>负责腾讯的支付系统的后台核心系统测试</li>
+						<li>设计测试用例并进行测试，设计实现自动化，性能测试等， 并再过程中尝试探索新的测试方式和工具等</li> 
+						<li>负责期间发现bug 121个，从未出现过漏测及事故</li>
+					</ul>
+					<div class="right">
+						<canvas id="myChart3" width="200" height="200"></canvas>
+					</div>
+					<div class="clear"></div>
+				</div>
+		    </div>
+	    </div>
+	    <div class="section" id="self">
+	    	<div>
+		    	<h1>SAY SOME OTHERS</h1>
+		    	<div>
+		    		<img src="images/sep.jpg"/>
+		    	</div>
+		    	<div class ="wrapper">
+			    	<div class="text-left" id="self_eval">
+				    	<h2>1 组建负责人，毕业生导师，有合作能力，组织能力</h2>
+				    	<h2>2 热爱设计，在公司设计过海报、LOGO、期刊等</h2>
+				    	<h2>3 测试到开发，后台到前台，主持到策划, 但是什么都愿意踏实干</h2>
+				    	<h2>4 居然还得了腾讯的优秀个人</h2>
+			    	</div>
+			    </div>
+		    	<div id="work_img" class="wrapper">
+		    		<ul>
+		    			<li><img class="img_show" img-order='1' src="images/work1.jpg" alt="准现网海报"/></li>
+		    			<li><img class="img_show" img-order='2' src="images/work2.png" alt="中心logo,邮件签名"/></li>
+		    			<li><img class="img_show" img-order='3' src="images/work3.png" alt="中心质量杂志(邮件html)"/></li>
+		    			<li><img class="img_show" img-order='5' src="images/work5.png" alt="代码扫描平台首页设计"/></li>
+		    		</ul>
+		    	</div>
+		    	<div id="work1" style="display: none;"><img width='1024px' height="768px" src="images/work1.jpg"></div>
+		    	<div id="work2" style="display: none;"><img width='680px' height="133px" src="images/work2.png"></div>
+		    	<div id="work3" style="display: none;"><img width='768px' height="1066px" src="images/work3.png"></div>
+		    	<div id="work5" style="display: none;"><img width='1024px' height="476px" src="images/work5.png"></div>
+		    </div>
+	    </div>
+	</div>	
+</body>
 </html>
