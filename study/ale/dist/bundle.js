@@ -71,9 +71,10 @@
 /***/ (function(module, exports) {
 
 var game = {
+    _direction: 'left',
     init: function () {
         var _this = this;
-        this._game = new Phaser.Game(385,210, Phaser.AUTO, '', {
+        this._game = new Phaser.Game(385, 210, Phaser.AUTO, '', {
             preload: _this.preload.bind(this),
             create: _this.create.bind(this),
             update: _this.update.bind(this)    
@@ -81,17 +82,46 @@ var game = {
     },
     preload: function () {
         this._game.load.image('bg', 'assets/bg.png');
-        this._game.load.spritesheet('wsm', 'assets/wsm.png', 65, 80, 2);
+        this._game.load.spritesheet('wsm', 'assets/wsm.png', 65, 80, 6);
     },
     create: function () {
-        this._game.add.sprite(-10,-10, 'bg');
+
+        this._game.world.setBounds(10, 10, 375 * 10, 200);
+
+        this._game.add.sprite(0,0, 'bg');
         this._player = this._game.add.sprite(70, 90, 'wsm');
-        var normal = this._player.animations.add('normal');
-        this._player.animations.play('normal', 30, true);
+        this._player.animations.add('normal', [0,1], 2, true);
+        this._player.animations.add('fight_left', [2, 3], 20,false);
+        this._player.animations.add('fight_right', [4, 5], 20,false);
+        this._player.animations.play('normal');
+
+        this._game.physics.arcade.enable(this._player);
+        this._player.body.gravity.y = 200;
+        this._player.body.collideWorldBounds = true;
+
+
+        this._cursors = this._game.input.keyboard.createCursorKeys();
+        this._fightButton = this._game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
 
     },
     update: function () {
+        this._player.body.velocity.x = 0;
+        this._player.animations.play('normal');
 
+        if(this._cursors.left.isDown){
+            this._player.body.velocity.x = -200;
+            this._direction = 'left';
+        } else if(this._cursors.right.isDown){
+            this._player.body.velocity.x = 200;
+            this._direction = 'right';
+        }else if(this._cursors.up.isDown ){
+            this._player.body.velocity.y = -100;
+        }else if(this._cursors.down.isDown){
+            this._player.body.velocity.y = 0;
+        } else if(this._fightButton.isDown){
+            this._player.animations.play('fight_' + this._direction);
+        }
     }
 }
 
