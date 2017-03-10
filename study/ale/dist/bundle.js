@@ -72,6 +72,7 @@
 
 var game = {
     _direction: 'left',
+    _weaponDistacne: 0,
     init: function () {
         var _this = this;
         this._game = new Phaser.Game(385, 210, Phaser.AUTO, '', {
@@ -83,6 +84,8 @@ var game = {
     preload: function () {
         this._game.load.image('bg', 'assets/bg.png');
         this._game.load.spritesheet('wsm', 'assets/wsm.png', 65, 80, 6);
+        // this._game.load.spritesheet('skill', 'assets/skill.png', 85, 65);
+        this._game.load.spritesheet('skill', 'assets/skill.png', 85, 65);
     },
     create: function () {
 
@@ -100,6 +103,10 @@ var game = {
         this._player.body.collideWorldBounds = true;
 
 
+        this.skill = this._game.add.sprite(-85, -65, 'skill');
+        this.skill.animations.add('skill_start', [0,1,2,3], 4, false);
+        this._game.physics.arcade.enable(this.skill);
+
         this._cursors = this._game.input.keyboard.createCursorKeys();
         this._fightButton = this._game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
@@ -108,7 +115,16 @@ var game = {
     update: function () {
         this._player.body.velocity.x = 0;
         this._player.animations.play('normal');
+        console.log(this._weaponDistacne);
+        if(this._weaponDistacne < 100){
+            this._weaponDistacne += 1;
 
+        }else{
+            this.skill.body.velocity.x = 0;
+            this.skill.animations.stop();
+            this.skill.reset(-85, -65);
+            this._weaponDistacne = 0;
+        }
         if(this._cursors.left.isDown){
             this._player.body.velocity.x = -200;
             this._direction = 'left';
@@ -121,7 +137,14 @@ var game = {
             this._player.body.velocity.y = 0;
         } else if(this._fightButton.isDown){
             this._player.animations.play('fight_' + this._direction);
+            this._skill();
         }
+    },
+    _skill: function () {
+        console.log('!!!!')
+        this.skill.reset(this._player.x, this._player.y);
+        this.skill.animations.play('skill_start');
+        this.skill.body.velocity.x = 200;
     }
 }
 
