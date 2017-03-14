@@ -6,6 +6,7 @@ var skill = {
         this._skill.animations.add('skill_start', [0,1,2,3], 4, false);
         this._game.physics.arcade.enable(this._skill);
         this._skill.body.bounce.x = 1;
+        this._skill.body.setSize(19, 32, 27, 16);
 
         return this._skill;
     },
@@ -14,7 +15,7 @@ var skill = {
         this._skill.animations.stop();
         this._skill.reset(-85, -65);
     },
-    update: function (fightButton, reverse, playerPos) {
+    update: function (fightButton, direction, reverse, playerPos) {
         if(this._weaponDistacne < 40){
             if(reverse){
                 this._weaponDistacne -= 1;
@@ -28,13 +29,15 @@ var skill = {
 
         if(fightButton.isDown){
             this._weaponDistacne = 0;
-            this.start(reverse, playerPos);
+            this.start(direction, playerPos);
         }
+
+
     },
-    start: function (reverse, playerPos) {
+    start: function (direction, playerPos) {
         this._skill.reset(playerPos.x, playerPos.y);
         this._skill.animations.play('skill_start');
-        if(this.reverse){
+        if(direction == 'left'){
             this._skill.body.velocity.x = -200;
         }else{
             this._skill.body.velocity.x = 200;

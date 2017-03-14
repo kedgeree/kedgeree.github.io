@@ -18,6 +18,10 @@ var game = {
         this._game.load.spritesheet('skill', 'assets/skill.png', 85, 65);
         this._game.load.image('haha', 'assets/haha.png');
         this._game.load.image('throw', 'assets/throw.png');
+        this._game.load.image('monster', 'assets/monster.png');
+        this._game.load.image('heart', 'assets/heart.png');
+        this._game.load.image('heart_s', 'assets/heart_s.png');
+
     },
     create: function () {
 
@@ -28,7 +32,7 @@ var game = {
         this._player = player.init(this._game);
 
         this._skill = skill.init(this._game);
-        this._throws = throws.init(this._game);
+        throws.init(this._game);
 
         this.stateText = this._game.add.text(this._game.world.centerX, this._game.world.centerY,' ', { font: '40px Arial', fill: '#fff' });
         this.stateText.anchor.setTo(0.5, 0.5);
@@ -44,28 +48,30 @@ var game = {
         if(this._player.alive){
             player.normal();
 
-            skill.update(this._fightButton, this._reverse, {x: this._player.body.x, y: this._player.body.y});
-            player.control(this._cursors, this._fightButton);
+            skill.update(this._fightButton, player._direction, this._reverse,  {x: this._player.body.x, y: this._player.body.y});
+            player.control(this._cursors, this._fightButton, this._skill, this._reverse);
 
-            if(this._game.time.now > throws._throwTime){
-                throws.update({x: this.haha.body.x, y: this.haha.body.y}, this._player);
-            }
+            throws.update(this.haha, this._player, this._skill);
 
 
             this._game.physics.arcade.collide(this._player, this.haha);
             this._game.physics.arcade.collide(this._skill, this.haha, function () {
                 _self._reverse = true;
             });
-            this._game.physics.arcade.overlap(this._throws, this._player, this._throwOnPlayer, null, this);
 
+        }else{
+            throws.allKill();
+            this.stateText.text = 'GAME OVER!';
+            this.stateText.visibility = true;
+
+            this._game.input.onTap.addOnce(this.restart,_self);
         }
 
     },
-    _throwOnPlayer: function (player, t) {
-        this._throws.callAll('kill');
-        this._player.kill();
-        this.stateText.text = 'GAME OVER!';
-        this.stateText.visibility = true;
+    restart: function () {
+        player.restart();
+        console.log(this.stateText);
+        this.stateText.visible = false;
     },
 }
 
