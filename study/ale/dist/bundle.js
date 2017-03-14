@@ -71,24 +71,6 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-var boss = {
-    init: function (game) {
-        this._game = game;
-        this._boss = this._game.add.sprite(330, 60, 'haha');
-
-        this._game.physics.enable(this._boss, Phaser.Physics.ARCADE);
-        this._boss.body.immovable = true;
-
-        return this._boss;
-    }
-}
-/* harmony default export */ __webpack_exports__["a"] = boss;
-
-/***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 var player = {
     _direction: 'right',
   init: function (game) {
@@ -175,6 +157,24 @@ var player = {
 /* harmony default export */ __webpack_exports__["a"] = player;
 
 /***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var boss = {
+    init: function (game) {
+        this._game = game;
+        this._boss = this._game.add.sprite(330, 60, 'haha');
+
+        this._game.physics.enable(this._boss, Phaser.Physics.ARCADE);
+        this._boss.body.immovable = true;
+
+        return this._boss;
+    }
+}
+/* harmony default export */ __webpack_exports__["a"] = boss;
+
+/***/ }),
 /* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -232,7 +232,7 @@ var skill = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__player_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__player_js__ = __webpack_require__(0);
 
 var throws = {
     _throwTime: 0,
@@ -335,8 +335,8 @@ var throws = {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boss_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__player_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boss_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__player_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__skill_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__throws_js__ = __webpack_require__(3);
 
@@ -365,6 +365,9 @@ var game = {
 
     },
     create: function () {
+        this._game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+        this._game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        this._game.scale.refresh();
 
         this._game.world.setBounds(10, 10, 375, 200);
         this._game.add.sprite(10,10, 'bg');

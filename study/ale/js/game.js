@@ -24,6 +24,9 @@ var game = {
 
     },
     create: function () {
+        this._game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+        this._game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        this._game.scale.refresh();
 
         this._game.world.setBounds(10, 10, 375, 200);
         this._game.add.sprite(10,10, 'bg');
