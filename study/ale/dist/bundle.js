@@ -63,99 +63,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boss_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__player_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__skill_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__throws_js__ = __webpack_require__(4);
-
-
-
-
-
-// var boss = require('./boss.js');
-// var player = require('./player.js');
-// var skill = require('./skill.js');
-// var throws = require('./throws.js');
-
-var game = {
-    init: function () {
-        var _this = this;
-        this._game = new Phaser.Game(385, 210, Phaser.AUTO, '', {
-            preload: _this.preload.bind(this),
-            create: _this.create.bind(this),
-            update: _this.update.bind(this),
-        })
-    },
-    preload: function () {
-        this._game.load.image('bg', 'assets/bg.png');
-        this._game.load.spritesheet('wsm', 'assets/wsm.png', 65, 80, 8);
-        this._game.load.spritesheet('skill', 'assets/skill.png', 85, 65);
-        this._game.load.image('haha', 'assets/haha.png');
-        this._game.load.image('throw', 'assets/throw.png');
-    },
-    create: function () {
-
-        this._game.world.setBounds(10, 10, 375, 200);
-        this._game.add.sprite(0,0, 'bg');
-
-        this.haha = __WEBPACK_IMPORTED_MODULE_0__boss_js__["a" /* default */].init(this._game);
-        this._player = __WEBPACK_IMPORTED_MODULE_1__player_js__["a" /* default */].init(this._game);
-
-        this._skill = __WEBPACK_IMPORTED_MODULE_2__skill_js__["a" /* default */].init(this._game);
-        this._throws = __WEBPACK_IMPORTED_MODULE_3__throws_js__["a" /* default */].init(this._game);
-
-        this.stateText = this._game.add.text(this._game.world.centerX, this._game.world.centerY,' ', { font: '40px Arial', fill: '#fff' });
-        this.stateText.anchor.setTo(0.5, 0.5);
-        this.stateText.visibility = false;
-
-        this._cursors = this._game.input.keyboard.createCursorKeys();
-        this._fightButton = this._game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-
-
-    },
-    update: function () {
-        var _self = this;
-        if(this._player.alive){
-            __WEBPACK_IMPORTED_MODULE_1__player_js__["a" /* default */].normal();
-
-            __WEBPACK_IMPORTED_MODULE_2__skill_js__["a" /* default */].update(this._fightButton, this._reverse, {x: this._player.body.x, y: this._player.body.y});
-            __WEBPACK_IMPORTED_MODULE_1__player_js__["a" /* default */].control(this._cursors, this._fightButton);
-
-            if(this._game.time.now > __WEBPACK_IMPORTED_MODULE_3__throws_js__["a" /* default */]._throwTime){
-                __WEBPACK_IMPORTED_MODULE_3__throws_js__["a" /* default */].update({x: this.haha.body.x, y: this.haha.body.y}, this._player);
-            }
-
-
-            this._game.physics.arcade.collide(this._player, this.haha);
-            this._game.physics.arcade.collide(this._skill, this.haha, function () {
-                _self._reverse = true;
-            });
-            this._game.physics.arcade.overlap(this._throws, this._player, this._throwOnPlayer, null, this);
-
-        }
-
-    },
-    _throwOnPlayer: function (player, t) {
-        this._throws.callAll('kill');
-        this._player.kill();
-        this.stateText.text = 'GAME OVER!';
-        this.stateText.visibility = true;
-    },
-}
-
-game.init();
-
-/***/ }),
-/* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -173,7 +85,7 @@ var boss = {
 /* harmony default export */ __webpack_exports__["a"] = boss;
 
 /***/ }),
-/* 2 */
+/* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -224,7 +136,7 @@ var player = {
 /* harmony default export */ __webpack_exports__["a"] = player;
 
 /***/ }),
-/* 3 */
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -274,7 +186,7 @@ var skill = {
 /* harmony default export */ __webpack_exports__["a"] = skill;
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -303,6 +215,89 @@ var throws = {
     }
 }
 /* harmony default export */ __webpack_exports__["a"] = throws;
+
+/***/ }),
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__boss_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__player_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__skill_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__throws_js__ = __webpack_require__(3);
+
+
+
+
+
+var game = {
+    init: function () {
+        var _this = this;
+        this._game = new Phaser.Game(385, 208, Phaser.AUTO, '', {
+            preload: _this.preload.bind(this),
+            create: _this.create.bind(this),
+            update: _this.update.bind(this),
+        })
+    },
+    preload: function () {
+        this._game.load.image('bg', 'assets/bg1.png');
+        this._game.load.spritesheet('wsm', 'assets/wsm.png', 65, 80, 8);
+        this._game.load.spritesheet('skill', 'assets/skill.png', 85, 65);
+        this._game.load.image('haha', 'assets/haha.png');
+        this._game.load.image('throw', 'assets/throw.png');
+    },
+    create: function () {
+
+        this._game.world.setBounds(10, 10, 375, 200);
+        this._game.add.sprite(10,10, 'bg');
+
+        this.haha = __WEBPACK_IMPORTED_MODULE_0__boss_js__["a" /* default */].init(this._game);
+        this._player = __WEBPACK_IMPORTED_MODULE_1__player_js__["a" /* default */].init(this._game);
+
+        this._skill = __WEBPACK_IMPORTED_MODULE_2__skill_js__["a" /* default */].init(this._game);
+        this._throws = __WEBPACK_IMPORTED_MODULE_3__throws_js__["a" /* default */].init(this._game);
+
+        this.stateText = this._game.add.text(this._game.world.centerX, this._game.world.centerY,' ', { font: '40px Arial', fill: '#fff' });
+        this.stateText.anchor.setTo(0.5, 0.5);
+        this.stateText.visibility = false;
+
+        this._cursors = this._game.input.keyboard.createCursorKeys();
+        this._fightButton = this._game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
+
+    },
+    update: function () {
+        var _self = this;
+        if(this._player.alive){
+            __WEBPACK_IMPORTED_MODULE_1__player_js__["a" /* default */].normal();
+
+            __WEBPACK_IMPORTED_MODULE_2__skill_js__["a" /* default */].update(this._fightButton, this._reverse, {x: this._player.body.x, y: this._player.body.y});
+            __WEBPACK_IMPORTED_MODULE_1__player_js__["a" /* default */].control(this._cursors, this._fightButton);
+
+            if(this._game.time.now > __WEBPACK_IMPORTED_MODULE_3__throws_js__["a" /* default */]._throwTime){
+                __WEBPACK_IMPORTED_MODULE_3__throws_js__["a" /* default */].update({x: this.haha.body.x, y: this.haha.body.y}, this._player);
+            }
+
+
+            this._game.physics.arcade.collide(this._player, this.haha);
+            this._game.physics.arcade.collide(this._skill, this.haha, function () {
+                _self._reverse = true;
+            });
+            this._game.physics.arcade.overlap(this._throws, this._player, this._throwOnPlayer, null, this);
+
+        }
+
+    },
+    _throwOnPlayer: function (player, t) {
+        this._throws.callAll('kill');
+        this._player.kill();
+        this.stateText.text = 'GAME OVER!';
+        this.stateText.visibility = true;
+    },
+}
+
+game.init();
 
 /***/ })
 /******/ ]);
