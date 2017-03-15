@@ -78,7 +78,7 @@ var game = {
         this.stateText.visible = false;
     },
     render: function () {
-        // this._game.debug.pointer(this._game.input.mousePointer);
+        this._game.debug.pointer(this._game.input.mousePointer);
 
         // this._game.debug.pointer(this._game.input.pointer1);
     }

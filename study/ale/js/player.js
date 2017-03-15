@@ -34,7 +34,6 @@ var player = {
       return null;
     },
     _onSwipe: function () {
-        console.log(Phaser.Point.distance(this._game.input.activePointer.position, this._game.input.activePointer.positionDown) );
         return (Phaser.Point.distance(this._game.input.activePointer.position, this._game.input.activePointer.positionDown) > 50
         && this._game.input.activePointer.duration > 100 && this._game.input.activePointer.duration < 250);
     },
