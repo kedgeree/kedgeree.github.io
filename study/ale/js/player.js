@@ -28,7 +28,7 @@ var player = {
         this._player.animations.play('normal');
     },
     _getTapPos: function () {
-      if(this._game.input.mousePointer.isDown){
+      if(this._game.input.activePointer.isDown){
           return Math.floor(this._game.input.x / (this._game.width / 2));
       }
       return null;
