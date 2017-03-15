@@ -10,6 +10,7 @@ var game = {
             preload: _this.preload.bind(this),
             create: _this.create.bind(this),
             update: _this.update.bind(this),
+            render: _this.render.bind(this)
         })
     },
     preload: function () {
@@ -23,10 +24,11 @@ var game = {
         this._game.load.image('heart_s', 'assets/heart_s.png');
 
     },
+    gofull: function () {
+        this._game.scale.startFullScreen(false);
+    },
     create: function () {
-        this._game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-        this._game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-        this._game.scale.refresh();
+        if (!this._game.device.desktop){ this._game.input.onDown.add(this.gofull, this); }
 
         this._game.world.setBounds(10, 10, 375, 200);
         this._game.add.sprite(10,10, 'bg');
@@ -40,11 +42,10 @@ var game = {
         this.stateText = this._game.add.text(this._game.world.centerX, this._game.world.centerY,' ', { font: '40px Arial', fill: '#fff' });
         this.stateText.anchor.setTo(0.5, 0.5);
         this.stateText.visibility = false;
+        // this._game.input.addPointer();
 
         this._cursors = this._game.input.keyboard.createCursorKeys();
         this._fightButton = this._game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-
-
     },
     update: function () {
         var _self = this;
@@ -76,6 +77,11 @@ var game = {
         console.log(this.stateText);
         this.stateText.visible = false;
     },
+    render: function () {
+        // this._game.debug.pointer(this._game.input.mousePointer);
+
+        // this._game.debug.pointer(this._game.input.pointer1);
+    }
 }
 
 game.init();

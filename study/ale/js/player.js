@@ -14,8 +14,6 @@ var player = {
       for(var i = 0; i< 3; i++){
           this._lives.create(game.world.width - 60 + (20 * i), 30, 'heart_s')
       }
-
-
       return this._player;
   },
   _initAnimation: function () {
@@ -29,23 +27,38 @@ var player = {
         this._player.body.velocity.x = 0;
         this._player.animations.play('normal');
     },
+    _getTapPos: function () {
+      if(this._game.input.mousePointer.isDown){
+          return Math.floor(this._game.input.x / (this._game.width / 2));
+      }
+      return null;
+    },
+    _onSwipe: function () {
+        console.log(Phaser.Point.distance(this._game.input.activePointer.position, this._game.input.activePointer.positionDown) );
+        return (Phaser.Point.distance(this._game.input.activePointer.position, this._game.input.activePointer.positionDown) > 50
+        && this._game.input.activePointer.duration > 100 && this._game.input.activePointer.duration < 250);
+    },
     control: function (cursors , fightButton, skill, skillReverse) {
         this._skillReverse = skillReverse;
-        if(cursors.left.isDown){
+        if(cursors.left.isDown || this._getTapPos() == 0){
             this._player.body.velocity.x = -200;
             this._direction = 'left';
-        } else if(cursors.right.isDown){
+        }
+        if(cursors.right.isDown || this._getTapPos() == 1){
             this._player.body.velocity.x = 200;
             this._direction = 'right';
-        }else if(cursors.up.isDown && this._player.y >= 130){
+        }
+        if((cursors.up.isDown || this._onSwipe()) && this._player.y >= 130){
             this._player.body.velocity.y = -200;
-        }else if(cursors.down.isDown){
+        }
+        if(cursors.down.isDown){
             this._player.body.velocity.y = 200;
             if(this._player.y >= 120){
                 this._player.animations.play('down');
                 this._player.body.setSize(70, 57, 0 , 16);
             }
-        } else if(fightButton.isDown){
+        }
+        if(fightButton.isDown){
             this._player.animations.play('fight_' + this._direction);
         }
         this._game.physics.arcade.overlap(this._player, skill, this._skillOnPlayer, null, this);

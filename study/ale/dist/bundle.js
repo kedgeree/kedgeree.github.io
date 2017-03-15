@@ -87,8 +87,6 @@ var player = {
       for(var i = 0; i< 3; i++){
           this._lives.create(game.world.width - 60 + (20 * i), 30, 'heart_s')
       }
-
-
       return this._player;
   },
   _initAnimation: function () {
@@ -102,23 +100,38 @@ var player = {
         this._player.body.velocity.x = 0;
         this._player.animations.play('normal');
     },
+    _getTapPos: function () {
+      if(this._game.input.mousePointer.isDown){
+          return Math.floor(this._game.input.x / (this._game.width / 2));
+      }
+      return null;
+    },
+    _onSwipe: function () {
+        console.log(Phaser.Point.distance(this._game.input.activePointer.position, this._game.input.activePointer.positionDown) );
+        return (Phaser.Point.distance(this._game.input.activePointer.position, this._game.input.activePointer.positionDown) > 50
+        && this._game.input.activePointer.duration > 100 && this._game.input.activePointer.duration < 250);
+    },
     control: function (cursors , fightButton, skill, skillReverse) {
         this._skillReverse = skillReverse;
-        if(cursors.left.isDown){
+        if(cursors.left.isDown || this._getTapPos() == 0){
             this._player.body.velocity.x = -200;
             this._direction = 'left';
-        } else if(cursors.right.isDown){
+        }
+        if(cursors.right.isDown || this._getTapPos() == 1){
             this._player.body.velocity.x = 200;
             this._direction = 'right';
-        }else if(cursors.up.isDown && this._player.y >= 130){
+        }
+        if((cursors.up.isDown || this._onSwipe()) && this._player.y >= 130){
             this._player.body.velocity.y = -200;
-        }else if(cursors.down.isDown){
+        }
+        if(cursors.down.isDown){
             this._player.body.velocity.y = 200;
             if(this._player.y >= 120){
                 this._player.animations.play('down');
                 this._player.body.setSize(70, 57, 0 , 16);
             }
-        } else if(fightButton.isDown){
+        }
+        if(fightButton.isDown){
             this._player.animations.play('fight_' + this._direction);
         }
         this._game.physics.arcade.overlap(this._player, skill, this._skillOnPlayer, null, this);
@@ -351,6 +364,7 @@ var game = {
             preload: _this.preload.bind(this),
             create: _this.create.bind(this),
             update: _this.update.bind(this),
+            render: _this.render.bind(this)
         })
     },
     preload: function () {
@@ -364,10 +378,11 @@ var game = {
         this._game.load.image('heart_s', 'assets/heart_s.png');
 
     },
+    gofull: function () {
+        this._game.scale.startFullScreen(false);
+    },
     create: function () {
-        this._game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
-        this._game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-        this._game.scale.refresh();
+        if (!this._game.device.desktop){ this._game.input.onDown.add(this.gofull, this); }
 
         this._game.world.setBounds(10, 10, 375, 200);
         this._game.add.sprite(10,10, 'bg');
@@ -381,11 +396,10 @@ var game = {
         this.stateText = this._game.add.text(this._game.world.centerX, this._game.world.centerY,' ', { font: '40px Arial', fill: '#fff' });
         this.stateText.anchor.setTo(0.5, 0.5);
         this.stateText.visibility = false;
+        // this._game.input.addPointer();
 
         this._cursors = this._game.input.keyboard.createCursorKeys();
         this._fightButton = this._game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-
-
     },
     update: function () {
         var _self = this;
@@ -417,6 +431,11 @@ var game = {
         console.log(this.stateText);
         this.stateText.visible = false;
     },
+    render: function () {
+        // this._game.debug.pointer(this._game.input.mousePointer);
+
+        // this._game.debug.pointer(this._game.input.pointer1);
+    }
 }
 
 game.init();
