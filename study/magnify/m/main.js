@@ -290,10 +290,9 @@ canvas.ontouchmove = function (e) {
         var scale = pinchRatio * distance;
         if(scale > 1 && scale < 3){
             scaleOutput = parseFloat(scale).toFixed(2);
-            document.getElementById('scaleOutput').innerText = scaleOutput.toFixed(2);
-
-            eraseMagnifyGlass();
-            drawMagnifyingGlass({x: magnifyingGlassX, y: magnifyingGlassY});
+            //
+            // eraseMagnifyGlass();
+            // drawMagnifyingGlass({x: magnifyingGlassX, y: magnifyingGlassY});
         }
     }
 }
@@ -304,6 +303,9 @@ canvas.ontouchend = function (e) {
         mouseUpOrTouchEnd(windowToCanvas(e.pageX, e.pageY));
     }else{
         dragging = false;
+        document.getElementById('scaleOutput').innerText = scaleOutput.toFixed(2);
+        eraseMagnifyGlass();
+        drawMagnifyingGlass({x: magnifyingGlassX, y: magnifyingGlassY});
     }
 }
 canvas.onmousedown = function (e) {
