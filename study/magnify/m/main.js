@@ -299,7 +299,10 @@ canvas.ontouchmove = function (e) {
 }
 canvas.ontouchend = function (e) {
     e.preventDefault();
-    mouseUpOrTouchEnd(windowToCanvas(e.pageX, e.pageY));
+
+    if(!isPinching(e)) {
+        mouseUpOrTouchEnd(windowToCanvas(e.pageX, e.pageY));
+    }
 }
 canvas.onmousedown = function (e) {
     e.preventDefault();
@@ -315,7 +318,8 @@ canvas.onmousemove = function (e) {
 
 canvas.onmouseup = function (e) {
     e.preventDefault();
-    mouseUpOrTouchEnd(windowToCanvas(e.clientX, e.clientY));
+        mouseUpOrTouchEnd(windowToCanvas(e.clientX, e.clientY));
+
 }
 
 if(window.matchMedia && screen.width <= 1024){
