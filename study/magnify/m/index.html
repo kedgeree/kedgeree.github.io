@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>canvas test</title>
+    <style>
+        body{
+            background: -webkit-gradient(radial, 325 50%, 10, 325 50%, 640, from(rgb(195, 175, 140)), to(rgb(254, 232, 214)));
+            background-image: -webkit-radial-gradient(center, circle farthest-side, rgb(195, 175, 140), rgb(254, 232, 214));
+            background-image: -moz-radial-gradient(center, circle farthest-side, rgb(195, 175, 140), rgb(254, 232, 214));
+            background-image: -o-radial-gradient(center, circle farthest-side, rgb(195, 175, 140), rgb(254, 232, 214));
+            background-image: radial-gradient(center, circle farthest-side, rgb(195, 175, 140), rgb(254, 232, 214));
+            height:100%;
+        }
+        #backdrop {
+            background: blue;
+        }
+        #controls {
+            position: absolute;
+            left: 60px;
+            top: 0px;
+        }
+
+        @media all and (min-device-width: 1025px) {
+            #canvas {
+                position: absolute;
+                top: 60px;
+                left: 35px;
+                -webkit-box-shadow: rgba(60, 60, 70, 0.7) 4px 4px 8px;
+                -moz-box-shadow: rgba(60, 60, 70, 0.7) 4px 4px 8px;
+                box-shadow: rgba(60, 60, 70, 0.7) 4px 4px 8px;
+                border: 1px solid rgb(52, 72, 35);
+                cursor: pointer;
+            }
+
+            #controls {
+                margin-top: 5px;
+                position: absolute;
+                left: 60px;
+            }
+        }
+
+        #scaleOutput{
+            position: absolute;
+            left: -20px;
+            top: 10px;
+            color: rgb(52, 72,35);
+            font: 17px Helvetica;
+            text-shadow: 1px 1px 1px rgb(255,255,255);
+        }
+        #magnifySlider{
+            position: absolute;
+            left: 30px;
+            margin-left: 10px;
+            display: inline;
+            width: 200px;
+            height: 37px;
+        }
+        #glassSizeSliderDiv{
+            position: absolute;
+            left:290px;
+            margin-left: 10px;
+            display: inline;
+            width: 200px;
+            height: 37px;
+        }
+        #glassSizeCanvas{
+            position: absolute;
+            left: 260px;
+        }
+    </style>
+</head>
+<body>
+    <div id="backdrop">
+        <div id="controls">
+            <span id="scaleOutput">1.5</span>
+            <div id="magnifySlider" class="slider"></div>
+            <canvas id="glassSizeCanvas" width="40" height="40">
+                Canvas not supported
+            </canvas>
+            <div id="glassSizeSliderDiv" class="slider"></div>
+        </div>
+    </div>
+    <canvas id="canvas" width="955" height="611">
+        Canvas not suppported
+    </canvas>
+    <script src="../common/roundedRect.js"></script>
+    <script src="../common/slider.js"></script>
+    <script src="../animate/animate.js"></script>
+    <script src="main.js"></script>
+
+</body>
+</html>

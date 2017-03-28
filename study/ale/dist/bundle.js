@@ -106,8 +106,18 @@ var player = {
       }
       return null;
     },
-    _onSwipe: function () {
-        return (Phaser.Point.distance(this._game.input.activePointer.position, this._game.input.activePointer.positionDown) > 50
+    _onSwipeUp: function () {
+        var end = this._game.input.activePointer.position,
+            start = this._game.input.activePointer.positionDown;
+
+        return (end.y - start.y < -50
+        && this._game.input.activePointer.duration > 100 && this._game.input.activePointer.duration < 250);
+    },
+    _onSwipeDown: function () {
+        var end = this._game.input.activePointer.position,
+            start = this._game.input.activePointer.positionDown;
+        // console.log(Phaser.Point.distance(end, start), end.y > start.y, this._game.input.activePointer.duration);
+        return ( end.y - start.y > 50
         && this._game.input.activePointer.duration > 100 && this._game.input.activePointer.duration < 250);
     },
     control: function (cursors , fightButton, skill, skillReverse) {
@@ -120,10 +130,11 @@ var player = {
             this._player.body.velocity.x = 200;
             this._direction = 'right';
         }
-        if((cursors.up.isDown || this._onSwipe()) && this._player.y >= 130){
+        if((cursors.up.isDown || this._onSwipeUp() ) && this._player.y >= 130){
             this._player.body.velocity.y = -200;
         }
-        if(cursors.down.isDown){
+        if(cursors.down.isDown || this._onSwipeDown()){
+            console.log('down!!!!');
             this._player.body.velocity.y = 200;
             if(this._player.y >= 120){
                 this._player.animations.play('down');
