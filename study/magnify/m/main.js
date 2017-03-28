@@ -302,6 +302,8 @@ canvas.ontouchend = function (e) {
 
     if(!isPinching(e)) {
         mouseUpOrTouchEnd(windowToCanvas(e.pageX, e.pageY));
+    }else{
+        dragging = false;
     }
 }
 canvas.onmousedown = function (e) {
