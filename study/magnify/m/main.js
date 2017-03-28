@@ -293,7 +293,7 @@ canvas.ontouchmove = function (e) {
             document.getElementById('scaleOutput').innerText = scaleOutput.toFixed(2);
 
             eraseMagnifyGlass();
-            drawMagnifyingGlass(windowToCanvas(e.pageX, e.pageY));
+            drawMagnifyingGlass({x: magnifyingGlassX, y: magnifyingGlassY});
         }
     }
 }
