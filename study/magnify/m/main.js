@@ -290,9 +290,10 @@ canvas.ontouchmove = function (e) {
         var scale = pinchRatio * distance;
         if(scale > 1 && scale < 3){
             scaleOutput = parseFloat(scale).toFixed(2);
+            document.getElementById('scaleOutput').innerText = scaleOutput.toFixed(2);
 
             eraseMagnifyGlass();
-            drawMagnifyingGlass(windowToCanvas(magnifyingGlassX, magnifyingGlassY));
+            drawMagnifyingGlass(windowToCanvas(e.pageX, e.pageY));
         }
     }
 }
