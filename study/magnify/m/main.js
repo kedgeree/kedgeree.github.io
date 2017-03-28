@@ -278,7 +278,7 @@ canvas.ontouchmove = function (e) {
     e.preventDefault();
     if(isDragging(e)){
         eraseMagnifyGlass();
-        drawMagnifyingGlass(windowToCanvas(e.clientX, e.clientY));
+        drawMagnifyingGlass(windowToCanvas(e.pageX, e.pageY));
     }
 }
 canvas.ontouchend = function (e) {
