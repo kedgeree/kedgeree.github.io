@@ -193,7 +193,8 @@ var mousedown = {},
     dragging = false,
     velocityX = 0,
     velocityY  = 0,
-    playing = true;
+    playing = true,
+    pinchRatio;
 
 var windowToCanvas = function (x, y) {
     var bbox = canvas.getBoundingClientRect();
@@ -265,20 +266,34 @@ canvas.ontouchstart = function (e) {
     if(isDragging(e)){
         mouseDownOrTouchStart(windowToCanvas(e.pageX, e.pageY));
     }
-    // else if(isPinching(e)){
-    //     //两指, 放大缩小
-    //     var touch1 = e.touches.item(0),
-    //         touch2 = e.touches.item(1),
-    //         point1 = windowToCanvas(touch1.pageX, touch1.pageY),
-    //         point2 = windowToCanvas(touch2.pageX, touch2.pageY);
-    //
-    // }
+    else if(isPinching(e)){
+        //两指, 放大缩小
+        var touch1 = e.touches.item(0),
+            touch2 = e.touches.item(1),
+            point1 = windowToCanvas(touch1.pageX, touch1.pageY),
+            point2 = windowToCanvas(touch2.pageX, touch2.pageY),
+            distance = Math.sqrt(Math.pow(point1.x - point2.x, 2) + Math.pow(point1.y - point2.y, 2));
+        pinchRatio = scaleOutput / distance;
+    }
 }
 canvas.ontouchmove = function (e) {
     e.preventDefault();
     if(isDragging(e)){
         eraseMagnifyGlass();
         drawMagnifyingGlass(windowToCanvas(e.pageX, e.pageY));
+    }else if(isPinching(e)){
+        var touch1 = e.touches.item(0),
+            touch2 = e.touches.item(1),
+            point1 = windowToCanvas(touch1.pageX, touch1.pageY),
+            point2 = windowToCanvas(touch2.pageX, touch2.pageY),
+            distance = Math.sqrt(Math.pow(point1.x - point2.x, 2) + Math.pow(point1.y - point2.y, 2));
+        var scale = pinchRatio * distance;
+        if(scale > 1 && scale < 3){
+            scaleOutput = parseFloat(scale).toFixed(2);
+
+            eraseMagnifyGlass();
+            drawMagnifyingGlass(windowToCanvas(magnifyingGlassX, magnifyingGlassY));
+        }
     }
 }
 canvas.ontouchend = function (e) {
@@ -286,7 +301,6 @@ canvas.ontouchend = function (e) {
     mouseUpOrTouchEnd(windowToCanvas(e.pageX, e.pageY));
 }
 canvas.onmousedown = function (e) {
-    // mousedown = ;
     e.preventDefault();
     mouseDownOrTouchStart(windowToCanvas(e.clientX, e.clientY))
 }
@@ -299,18 +313,8 @@ canvas.onmousemove = function (e) {
 }
 
 canvas.onmouseup = function (e) {
-    // mouseup = windowToCanvas(e.clientX, e.clientY);
     e.preventDefault();
     mouseUpOrTouchEnd(windowToCanvas(e.clientX, e.clientY));
-    // mouseup.time = +new Date;
-    // if(dragging && didThrow()){
-    //     console.log(mouseup.x - mousedown.x, mouseup.time - mousedown.time);
-    //     velocityX = (mouseup.x - mousedown.x) / (mouseup.time - mousedown.time) * 10;
-    //     velocityY = (mouseup.y - mousedown.y) / (mouseup.time - mousedown.time) * 10
-    //     playing = true;
-    //     window.requestNextAnimationFrame(animate);
-    // }
-    // dragging = false;
 }
 
 if(window.matchMedia && screen.width <= 1024){
