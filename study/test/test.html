@@ -1,0 +1,129 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-touch-fullscreen" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="apple-mobile-web-app-title" content="闪购">
+        <meta name="aplus-terminal" content="1">
+        <meta name="aplus-touch" content="1">
+        <meta name="format-detection" content="telephone=no, address=no">
+        <title>0</title>
+        <script src="jquery.js"></script>
+		<style>
+			body, html{
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				overflow: hidden;
+			}
+			*{
+				margin: 0;
+				padding: 0;
+			}
+			.op0{
+				opacity: 0;
+			}
+			.none{
+				display: none;
+			}
+			.flexible-area{
+				overflow: hidden;
+    			font-size: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<section class="flexible-area">
+            <div class="flexible-area-inner op0 none">
+				<!--这里开始是内容-->
+				<img src="http://img14.360buyimg.com/cms/jfs/t3508/26/1401895331/290476/1979b330/58257d82Ncfed66a2.jpg" alt="" usemap="#Map3" border="0" height="1009" width="750">
+				<map name="Map3" id="Map3">  
+					<!--
+					<area shape="rect" coords="14,22,365,487" href="#?_redcustom&des=openApp.jdMobile%3a%2f%2fvirtual%3fparams%3d%7b%22category%22%3a%22jump%22%2c%22des%22%3a%22productDetail%22%2c%22skuId%22%3a%2211464069265%22%2c%22sourceType%22%3a%22shangou%22%2c%22sourceValue%22%3a%22194295%22%2c%22landPageId%22%3a%22194295%22%7d" target="">
+					 <area shape="rect" coords="392,18,726,493" href="#?_redcustom&des=https%3a%2f%2fpro.m.jd.com%2fmall%2factive%2f2hqsQcyM5bEUVSStkN3BwrBHqVLd%2findex.html" target="">
+					 -->
+					 <area shape="rect" coords="14,22,365,487" href="openApp.jdMobile://virtual?params={\"category\":\"jump\",\"des\":\"productDetail\",\"skuId\":\"11464069265\",\"sourceType\":\"shangou\",\"sourceValue\":\"194295\",\"landPageId\":\"194295\"}" target="">
+					 <area shape="rect" coords="392,18,726,493" href="openApp.jdMobile://virtual?params={\"category\":\"jump\",\"des\":\"getCoupon\",\"action\":\"to\",\"url\":\"https%3a%2f%2fpro.m.jd.com%2fmall%2factive%2f2hqsQcyM5bEUVSStkN3BwrBHqVLd%2findex.html\",\"landPageId\":\"\"}" target="">
+				</map>
+				<!--内容结束-->
+            </div>
+        </section>
+	</body>
+	<script>
+	alert("!!!!");
+		function zoom(zTarget, callback) {
+			if(!zTarget.length) {
+				return;
+			}
+
+			zTarget.each(function(i, v) {
+				var _this = $(this);
+				_this.html('<div class="innerWraper">'+ _this.html() +'</div>');
+				var oImgAll = $('.innerWraper img', _this);
+				var k = 0;
+
+				if(!oImgAll.length) {
+					scale(_this);
+				}
+
+				for(var i = 0; i < oImgAll.length; i++){
+					(function(i){
+						var yImg = new Image();
+						
+						yImg.onload = function(){
+							k++;
+							if(k == oImgAll.length){
+							    scale(_this);
+							}
+						};
+
+						yImg.onerror = function() {
+							k++;
+							
+							if(k == oImgAll.length){
+							    scale(_this);
+							}
+						}
+						yImg.src = oImgAll[i].src;
+					})(i);
+				}
+			});
+			
+
+			function scale(area) {
+				area.removeClass('none');
+				var innerWraper = $('.innerWraper', area);
+				
+				setTimeout(function() {
+					var innerWidth = innerWraper.css("position", "absolute").width();
+				    var innerHeight = innerWraper.css("position", "absolute").height();
+				    area.addClass('none');
+				    var scale = innerWraper.css("position", "static") && $("body").width() / 750;
+				    
+				    var height = innerHeight * scale;
+				    
+				    if(height === 0){
+				        return;
+				    }
+
+				    innerWraper[0].style["WebkitTransformOrigin"] = "0 0";
+				    innerWraper[0].style["WebkitTransform"] = "scale(" + scale + ")";
+				    innerWraper.height(height);
+				    callback && callback(area, height);
+				}, 300);
+			}
+		}
+		zoom($('.flexible-area:not(.none) .flexible-area-inner'), function(_this, height) {
+
+			_this.removeClass('op0').removeClass('none');
+			_this.closest('.flexible-area-con').find('.load-wrap').remove();
+			var url = "#?height="  + parseInt(height, 10) ;
+			location.href = url;	
+		});
+	</script>
+</html>
